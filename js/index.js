@@ -5,6 +5,8 @@ let controls
 let explosion = []
 let boxes = []
 let boxMeshes = []
+var skip=0;
+
 
 const scale = 1;
 
@@ -166,7 +168,13 @@ function render() {
   requestAnimationFrame(render)
   stats.update()
   //pointsSceneAnimation()
-
+  if(skip !== 0) {
+    skip = ++skip % 2;
+    return;
+  }else{
+    skip = ++skip % 2;
+  }
+        
   if (controls.enabled) {
     world.step(dt)
     // Update box mesh positions
@@ -174,17 +182,17 @@ function render() {
       boxMeshes[i].position.copy(boxes[i].position)
       boxMeshes[i].quaternion.copy(boxes[i].quaternion)
     }
-    
+    /*
     // Update shooting ball positions
     if(playerBody.first) playerBody.firstAmmoMesh.position.copy(playerBody.firstAmmo.position)
     if(playerBody.second) playerBody.secondAmmoMesh.position.copy(playerBody.secondAmmo.position)
-    if(playerBody.third) playerBody.thirdAmmoMesh.position.copy(playerBody.thirdAmmo.position)
+    if(playerBody.third) playerBody.thirdAmmoMesh.position.copy(playerBody.thirdAmmo.position)*/
   }
   controls.update(Date.now() - time)
   time = Date.now()
   // TWEEN.update()
   // explosion
-  
+  /*
   if (explosion) {
     const len = explosion.length
     if (len > 0) {
@@ -192,7 +200,7 @@ function render() {
         explosion[i].update()
       }
     }
-  }
+  }*/
 
   renderer.render(scene, camera)
 }

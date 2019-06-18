@@ -1,4 +1,4 @@
-let explores = []
+/*let explores = []
 let exploreMeshes = []
 let exploreKind = []
 let delete_ = []
@@ -186,4 +186,4 @@ window.addEventListener('click', function(e) {
 
     }
   }
-})
+})*/
