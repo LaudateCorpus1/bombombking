@@ -85,7 +85,7 @@ function explore(xx, zz) {
   }
   for (let i=0; i<4; i++){
     if(dir_len[i]==-1 || exk[i]=='n' || exk[i]=='Tree' || exk[i] == 'House') continue
-    if(Math.random() > 0.8){
+    if(Math.random() > 0){
       let boxObj = new Box(scale);
       scene.add(boxObj.ammoMesh)
       boxObj.ammoBody.position.set(ex[i].position.x, 0.5, ex[i].position.z)
