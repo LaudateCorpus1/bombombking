@@ -8,6 +8,8 @@ let boxes = []
 let boxMeshes = []
 let map = 0
 var skip=0;
+const bgm = document.getElementById('bgm')
+bgm.volume = 0.8
 
 
 const scale = 1;
