@@ -159,6 +159,12 @@ function createTarget() {
   z = playerBody.position.z
   x += target_shootDirection.x * (sphereShape.radius*0.5)
   z += target_shootDirection.z * (sphereShape.radius*0.5)
+  for(var i=0; i < explores.length; i++){
+    if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x)){
+      if (exploreKind[i] != 'Bush') return
+    }
+  }
+  if(Math.abs(Math.round(x))>7 || Math.abs(Math.round(z))>6) return;
   targetObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
   scene.add(targetObj.ammoMesh)
 }
