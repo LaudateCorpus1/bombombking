@@ -24,12 +24,18 @@ function explore(xx, zz) {
   explosion[2] = new Explosion(xx - 5, yy + 5, zz + 10, 0x666666)
   explosion[3] = new Explosion(xx - 5, yy + 5, zz + 5, 0x999999)
   explosion[4] = new Explosion(xx + 5, yy + 5, zz - 5, 0xcccccc)
+  let b, bmesh, bkind
   let ex = []
   let exm = []
   let exk = ['n', 'n', 'n', 'n']
   let dir_len =[-1, -1, -1, -1]
   for(var i=0; i < explores.length; i++){
-    if (Math.abs(Math.round(exploreMeshes[i].position.x)-xx)<=playerBody.len && Math.round(exploreMeshes[i].position.z)==zz) {
+    if (Math.round(exploreMeshes[i].position.z)==zz && Math.round(exploreMeshes[i].position.x)==xx){
+      b=explores[i]
+      bmesh=exploreMeshes[i]
+      bkind=exploreKind[i]
+    }
+    else if (Math.abs(Math.round(exploreMeshes[i].position.x)-xx)<=playerBody.len && Math.round(exploreMeshes[i].position.z)==zz) {
       if(Math.round(exploreMeshes[i].position.x)-xx>0) {
         if (dir_len[0]==-1 | dir_len[0]>Math.abs(Math.round(exploreMeshes[i].position.x)-xx)){
           dir_len[0] = Math.abs(Math.round(exploreMeshes[i].position.x)-xx)
@@ -64,6 +70,17 @@ function explore(xx, zz) {
       }
     }
   }
+  if (b){
+    var index = explores.indexOf(b);
+    if (index> -1){
+      explores.splice(index, 1);
+      exploreMeshes.splice(index, 1);
+      exploreKind.splice(index, 1);
+    }
+    if(bmesh.geometry) bmesh.geometry.dispose()
+    world.remove(b)
+    scene.remove(bmesh)
+  }
   for (let i=0; i<4; i++){
     if(dir_len[i]==-1 || exk[i]=='n' || exk[i]=='Tree' || exk[i] == 'House') continue
     var index = explores.indexOf(ex[i]);
@@ -81,6 +98,7 @@ function explore(xx, zz) {
 //xx是水球的座標
 //xxx是其他可能被炸掉的東西的座標
 function check_explore(ammoBody) {
+  playerBody.bomb--
   const xx = ammoBody.position.x
   const yy = ammoBody.position.y
   const zz = ammoBody.position.z
@@ -111,7 +129,6 @@ function check_explore(ammoBody) {
       if(!jump){
         console.log('first bomb')
         playerBody.first = false
-        playerBody.bomb--
         check_explore(playerBody.firstAmmo)
         playerBody.firstAmmoMesh.geometry.dispose()
         world.remove(playerBody.firstAmmo)
@@ -136,7 +153,6 @@ function check_explore(ammoBody) {
       if(!jump){
         console.log('second bomb')
         playerBody.second = false
-        playerBody.bomb--
         check_explore(playerBody.secondAmmo)
         playerBody.secondAmmoMesh.geometry.dispose()
         world.remove(playerBody.secondAmmo)
@@ -161,7 +177,6 @@ function check_explore(ammoBody) {
       if(!jump){
         console.log('third bomb')
         playerBody.third = false
-        playerBody.bomb--
         check_explore(playerBody.thirdAmmo)
         playerBody.thirdAmmoMesh.geometry.dispose()
         world.remove(playerBody.thirdAmmo)
@@ -203,8 +218,10 @@ window.addEventListener('click', function(e) {
     // 左鍵（1）射擊與右鍵（3）疊磚
     if (e.which === 1) {
       for(var i=0; i < explores.length; i++){
-        if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x))
+        if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x)){
+          if (exploreKind[i] == 'Bush') continue
           return
+        }
       }
       if(playerBody.bomb >= 3 || Math.abs(Math.round(x))>7 || Math.abs(Math.round(z))>6) return; 
       console.log(x, y, z)
@@ -253,7 +270,6 @@ window.addEventListener('click', function(e) {
         ammoObj.ammoMesh.geometry.dispose()
         world.remove(ammoObj.ammoBody)
         scene.remove(ammoObj.ammoMesh)
-        playerBody.bomb = playerBody.bomb - 1
         clearInterval(id)
       }, 5000);
 
