@@ -170,21 +170,6 @@ function check_explore(ammoBody) {
     }
   }
   explore(xx, zz)
-  /*
-  for(var i=0; i<boxes.length; i++){
-    var xxx = boxes[i].position.x
-    var yyy = boxes[i].position.y
-    var zzz = boxes[i].position.z
-    if((xxx-xx)*(xxx-xx) + (yyy-yy)*(yyy-yy) + (zzz-zz)*(zzz-zz) <= 125*scale*scale){
-      explores.push(boxes[i])
-      exploreMeshes.push(boxMeshes[i])
-      exploreKind.push('box')
-    }
-  }*/
-  /*
-  explores.length = 0;
-  exploreMeshes.length = 0;
-  exploreKind.length = 0;*/
 }
 
 // shooting related settings
@@ -211,9 +196,16 @@ window.addEventListener('click', function(e) {
     let x = playerBody.position.x
     let y = playerBody.position.y
     let z = playerBody.position.z
+    getShootDir(e, shootDirection)
+    x += shootDirection.x * (sphereShape.radius*0.5)
+    z += shootDirection.z * (sphereShape.radius*0.5)
 
     // 左鍵（1）射擊與右鍵（3）疊磚
     if (e.which === 1) {
+      for(var i=0; i < explores.length; i++){
+        if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x))
+          return
+      }
       if(playerBody.bomb >= 3) return; 
       console.log(x, y, z)
   
@@ -265,10 +257,6 @@ window.addEventListener('click', function(e) {
         clearInterval(id)
       }, 5000);
 
-      getShootDir(e, shootDirection)
-      // Move the ball outside the player sphere
-      x += shootDirection.x * (sphereShape.radius*0.5)
-      z += shootDirection.z * (sphereShape.radius*0.5)
       ammoObj.ammoBody.position.set(Math.round(x), 0.5*scale, Math.round(z))
       ammoObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
 
