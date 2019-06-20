@@ -7,6 +7,8 @@ let ex_now = 0
 let boxes = []
 let boxMeshes = []
 var skip=0;
+const bgm = document.getElementById('bgm')
+bgm.volume = 0.8
 
 
 const scale = 1;
