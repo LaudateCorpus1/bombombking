@@ -3,6 +3,7 @@ let renderer, scene, camera
 let stats, gui
 let controls
 let explosion = []
+let ex_now = 0
 let boxes = []
 let boxMeshes = []
 var skip=0;
@@ -197,10 +198,19 @@ function render() {
     const len = explosion.length
     if (len > 0) {
       for (let i = 0; i < len; i++) {
-        explosion[i].update()
+        if (explosion[i].times==playerBody.len) explosion[i].destroy()
+        if (explosion[i]) explosion[i].update()
       }
     }
   }*/
+  if (explosion) {
+    const len = explosion.length
+    if (len > 0) {
+      for (let i = 0; i < len; i++) {
+        if (explosion[i]) explosion[i].update()
+      }
+    }
+  }
 
   renderer.render(scene, camera)
 }

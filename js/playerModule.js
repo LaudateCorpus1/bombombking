@@ -104,6 +104,7 @@ function createPlayer(){/*
   playerBody.position.set(7*scale, 0.4*playerScale, 6*scale)
   playerBody.linearDamping = 0.9
   
+  playerBody.len = 1
   playerBody.bomb = 0;
   playerBody.first = false;
   playerBody.second = false;

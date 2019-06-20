@@ -181,6 +181,17 @@ function createLego(x, y, z, color, scale) {
   scene.add(legoObj.lego)
   legoObj.lego.position.set(x*scale, y*scale, z*scale)
   legoObj.boxBody.position.set(x*scale, y*scale, z*scale)
+  explores.push(legoObj.boxBody)
+  exploreMeshes.push(legoObj.lego)
+  exploreKind.push('lego')
+}
+function createLego_upper(x, y, z, color, scale) {
+  const creeperMat_lego = new THREE.MeshPhongMaterial({ color: color })
+  legoObj = new Lego(legoGeo, boxShape_lego, creeperMat_lego)
+  world.addBody(legoObj.boxBody)
+  scene.add(legoObj.lego)
+  legoObj.lego.position.set(x*scale, y*scale, z*scale)
+  legoObj.boxBody.position.set(x*scale, y*scale, z*scale)
 }
 function createHouse(x, z, color, scale) {
   const creeperMat_house = new THREE.MeshPhongMaterial({ color: color })
@@ -189,6 +200,9 @@ function createHouse(x, z, color, scale) {
   scene.add(houseObj.House)
   houseObj.House.position.set(x*scale, 0.705*scale, z*scale)
   houseObj.boxBody.position.set(x*scale, 0.705*scale, z*scale)
+  explores.push(houseObj.boxBody)
+  exploreMeshes.push(houseObj.House)
+  exploreKind.push('House')
 }
 function createWooden(x ,z, scale) {
   woodenObj = new Wooden(scale, boxGeo_wooden, headMaterials_wooden, boxShape_wooden)
@@ -198,6 +212,9 @@ function createWooden(x ,z, scale) {
   woodenObj.boxBody.position.set(x*scale, 0.5*scale, z*scale)
   boxes.push(woodenObj.boxBody)
   boxMeshes.push(woodenObj.Wooden)
+  explores.push(woodenObj.boxBody)
+  exploreMeshes.push(woodenObj.Wooden)
+  exploreKind.push('Wooden')
 }
 function createTree(x ,z, scale) {
   treeObj = new Tree(scale, branchGeo, leafGeo, branchMat, creeperMat_tree, boxShape_tree)
@@ -205,11 +222,17 @@ function createTree(x ,z, scale) {
   scene.add(treeObj.Tree)
   treeObj.Tree.position.set(x*scale, 1*scale, z*scale)
   treeObj.boxBody.position.set(x*scale, 1*scale, z*scale)
+  explores.push(treeObj.boxBody)
+  exploreMeshes.push(treeObj.Tree)
+  exploreKind.push('Tree')
 }
 function createBush(x ,z, scale) {
   bushObj = new Bush(boxGeo_bush, creeperMat_bush)
   scene.add(bushObj.Bush)
   bushObj.Bush.position.set(x*scale, 0.5*scale, z*scale)
+  explores.push(bushObj.boxBody)
+  exploreMeshes.push(bushObj.Bush)
+  exploreKind.push('Bush')
 }
 
 function createScene() {
@@ -226,7 +249,7 @@ function createScene() {
 }
   for(let i=-7; i<=7; i++){
     for(let j=-6; j<=6; j++){
-      if(i<-1 | i>1) createLego(i, -0.495, j, 0x7Eff00, scale)
+      if(i<-1 | i>1) createLego_upper(i, -0.495, j, 0x7Eff00, scale)
     }
   }
   createWall(0, 1)

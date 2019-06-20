@@ -1,41 +1,80 @@
-/*let explores = []
+let explores = []
 let exploreMeshes = []
 let exploreKind = []
 let delete_ = []
 
 let sphereShape = new CANNON.Sphere(1.5)
 
-function explore(thing1, thing2, what) {
-  if(what == 'ammo'){
-    const xx = thing1.position.x
-    const yy = thing1.position.y
-    const zz = thing1.position.z
+function explore(xx, zz) {
+  //explosion[ex_now++] = new Explosion(xx, 0.5*scale, zz, 0x000000, scale)
+  let yy = 0.5*scale
+  if (explosion) {
+    const len = explosion.length
+    if (len > 0) {
+      for (let i = 0; i < len; i++) {
+        explosion[i].destroy()
+      }
+    }
+    explosion.length = 0
+  }
 
-    if (explosion) {
-      const len = explosion.length
-      if (len > 0) {
-        for (let i = 0; i < len; i++) {
-          explosion[i].destroy()
+  // 產生爆炸
+  explosion[0] = new Explosion(xx, yy, zz, 0x000000)
+  explosion[1] = new Explosion(xx + 5, yy + 5, zz + 5, 0x333333)
+  explosion[2] = new Explosion(xx - 5, yy + 5, zz + 10, 0x666666)
+  explosion[3] = new Explosion(xx - 5, yy + 5, zz + 5, 0x999999)
+  explosion[4] = new Explosion(xx + 5, yy + 5, zz - 5, 0xcccccc)
+  let ex = []
+  let exm = []
+  let exk = ['n', 'n', 'n', 'n']
+  let dir_len =[-1, -1, -1, -1]
+  for(var i=0; i < explores.length; i++){
+    if (Math.abs(Math.round(exploreMeshes[i].position.x)-xx)<=playerBody.len && Math.round(exploreMeshes[i].position.z)==zz) {
+      if(Math.round(exploreMeshes[i].position.x)-xx>0) {
+        if (dir_len[0]==-1 | dir_len[0]>Math.abs(Math.round(exploreMeshes[i].position.x)-xx)){
+          dir_len[0] = Math.abs(Math.round(exploreMeshes[i].position.x)-xx)
+          ex[0]=explores[i]
+          exm[0]=exploreMeshes[i]
+          exk[0]=exploreKind[i]
+        }
+      }else if (Math.round(exploreMeshes[i].position.x)-xx<0){
+        if (dir_len[1]==-1 | dir_len[1]>Math.abs(Math.round(exploreMeshes[i].position.x)-xx)){
+          dir_len[1] = Math.abs(Math.round(exploreMeshes[i].position.x)-xx)
+          ex[1]=explores[i]
+          exm[1]=exploreMeshes[i]
+          exk[1]=exploreKind[i]
         }
       }
-      explosion.length = 0
     }
-
-    // 產生爆炸
-    explosion[0] = new Explosion(xx, yy, zz, 0x000000)
-    explosion[1] = new Explosion(xx + 5, yy + 5, zz + 5, 0x333333)
-    explosion[2] = new Explosion(xx - 5, yy + 5, zz + 10, 0x666666)
-    explosion[3] = new Explosion(xx - 5, yy + 5, zz + 5, 0x999999)
-    explosion[4] = new Explosion(xx + 5, yy + 5, zz - 5, 0xcccccc)
-
-    thing2.geometry.dispose()
-    world.remove(thing1)
-    scene.remove(thing2)
+    if (Math.abs(Math.round(exploreMeshes[i].position.z)-zz)<=playerBody.len && Math.round(exploreMeshes[i].position.x)==xx) {
+      if(Math.round(exploreMeshes[i].position.z)-zz>0) {
+        if (dir_len[2]==-1 | dir_len[2]>Math.abs(Math.round(exploreMeshes[i].position.z)-zz)){
+          dir_len[2] = Math.abs(Math.round(exploreMeshes[i].position.z)-zz)
+          ex[2]=explores[i]
+          exm[2]=exploreMeshes[i]
+          exk[2]=exploreKind[i]
+        }
+      }else if (Math.round(exploreMeshes[i].position.z)-zz<0){
+        if (dir_len[3]==-1 | dir_len[3]>Math.abs(Math.round(exploreMeshes[i].position.z)-zz)){
+          dir_len[3] = Math.abs(Math.round(exploreMeshes[i].position.z)-zz)
+          ex[3]=explores[i]
+          exm[3]=exploreMeshes[i]
+          exk[3]=exploreKind[i]
+        }
+      }
+    }
   }
-  else if(what == 'box'){
-    thing2.geometry.dispose()
-    world.remove(thing1)
-    scene.remove(thing2)
+  for (let i=0; i<4; i++){
+    if(dir_len[i]==-1 || exk[i]=='n' || exk[i]=='Tree' || exk[i] == 'House') continue
+    var index = explores.indexOf(ex[i]);
+    if (index> -1){
+      explores.splice(index, 1);
+      exploreMeshes.splice(index, 1);
+      exploreKind.splice(index, 1);
+    }
+    if(exm[i].geometry) exm[i].geometry.dispose()
+    world.remove(ex[i])
+    scene.remove(exm[i])
   }
 }
 //x是玩家的座標 
@@ -47,53 +86,91 @@ function check_explore(ammoBody) {
   const zz = ammoBody.position.z
   var x = playerBody.position.x;
   var y = playerBody.position.y;
-  var z = playerBody.position.z;
+  var z = playerBody.position.z;/*
   if((x-xx)*(x-xx) + (y-yy)*(y-yy) + (z-zz)*(z-zz) <= 125*scale*scale){
     var die = setInterval(function(){
       handleEndGame();
       clearInterval(die);
     }, 300);
     //handleEndGame();
-  }
-  if(playerBody.first == true){
+  }*/
+  if(playerBody.first == true && playerBody.firstAmmo != ammoBody){
     var xxx = playerBody.firstAmmo.position.x
     var yyy = playerBody.firstAmmo.position.y
     var zzz = playerBody.firstAmmo.position.z
-    if((xxx-xx)*(xxx-xx) + (yyy-yy)*(yyy-yy) + (zzz-zz)*(zzz-zz) <= 125*scale*scale){
-      console.log('first bomb')
-      playerBody.first = false
-      explores.push(playerBody.firstAmmo)
-      exploreMeshes.push(playerBody.firstAmmoMesh)
-      exploreKind.push('ammo')
-      check_explore(playerBody.firstAmmo)
+    if( (Math.abs(xxx-xx)<=playerBody.len && zzz==zz) || 
+         (Math.abs(zzz-zz)<=playerBody.len && xxx==xx) ){
+      let jump = false
+      for(var i=0; i < explores.length; i++){
+        if ( ((zzz-zz)==0 && Math.round(exploreMeshes[i].position.z)-zz==0 && (xxx-xx)*(Math.round(exploreMeshes[i].position.x)-xx)>0 && Math.abs(Math.round(exploreMeshes[i].position.x)-xx) < Math.abs(xxx-xx)) ||
+             ((xxx-xx)==0 && Math.round(exploreMeshes[i].position.x)-xx==0 && (zzz-zz)*(Math.round(exploreMeshes[i].position.z)-zz)>0 && Math.abs(Math.round(exploreMeshes[i].position.z)-zz) < Math.abs(zzz-zz)) ){
+          jump = true
+          break
+        }
+      }
+      if(!jump){
+        console.log('first bomb')
+        explore(xxx, zzz)
+        playerBody.first = false
+        playerBody.bomb--
+        playerBody.firstAmmoMesh.geometry.dispose()
+        world.remove(playerBody.firstAmmo)
+        scene.remove(playerBody.firstAmmoMesh)
+      }
     }
   }
-  if(playerBody.second == true){
+  if(playerBody.second == true && playerBody.secondAmmo != ammoBody){
     var xxx = playerBody.secondAmmo.position.x
     var yyy = playerBody.secondAmmo.position.y
     var zzz = playerBody.secondAmmo.position.z
-    if((xxx-xx)*(xxx-xx) + (yyy-yy)*(yyy-yy) + (zzz-zz)*(zzz-zz) <= 125*scale*scale){
-      console.log('second bomb')
-      playerBody.second = false
-      explores.push(playerBody.secondAmmo)
-      exploreMeshes.push(playerBody.secondAmmoMesh)
-      exploreKind.push('ammo')
-      check_explore(playerBody.secondAmmo)
+    if( (Math.abs(xxx-xx)<=playerBody.len && zzz==zz) || 
+         (Math.abs(zzz-zz)<=playerBody.len && xxx==xx) ){
+      let jump = false
+      for(var i=0; i < explores.length; i++){
+        if ( ((zzz-zz)==0 && Math.round(exploreMeshes[i].position.z)-zz==0 && (xxx-xx)*(Math.round(exploreMeshes[i].position.x)-xx)>0 && Math.abs(Math.round(exploreMeshes[i].position.x)-xx) < Math.abs(xxx-xx)) ||
+             ((xxx-xx)==0 && Math.round(exploreMeshes[i].position.x)-xx==0 && (zzz-zz)*(Math.round(exploreMeshes[i].position.z)-zz)>0 && Math.abs(Math.round(exploreMeshes[i].position.z)-zz) < Math.abs(zzz-zz)) ){
+          jump = true
+          break
+        }
+      }
+      if(!jump){
+        console.log('second bomb')
+        explore(xxx, zzz)
+        playerBody.second = false
+        playerBody.bomb--
+        playerBody.secondAmmoMesh.geometry.dispose()
+        world.remove(playerBody.secondAmmo)
+        scene.remove(playerBody.secondAmmoMesh)
+      }
     }
   }
-  if(playerBody.third == true){
+  if(playerBody.third == true && playerBody.thirdAmmo != ammoBody){
     var xxx = playerBody.thirdAmmo.position.x
     var yyy = playerBody.thirdAmmo.position.y
     var zzz = playerBody.thirdAmmo.position.z
-    if((xxx-xx)*(xxx-xx) + (yyy-yy)*(yyy-yy) + (zzz-zz)*(zzz-zz) <= 125*scale*scale){
-      console.log('third bomb')
-      playerBody.third = false
-      explores.push(playerBody.thirdAmmo)
-      exploreMeshes.push(playerBody.thirdAmmoMesh)
-      exploreKind.push('ammo')
-      check_explore(playerBody.thirdAmmo)
+    if( (Math.abs(xxx-xx)<=playerBody.len && zzz==zz) || 
+         (Math.abs(zzz-zz)<=playerBody.len && xxx==xx) ){
+      let jump = false
+      for(var i=0; i < explores.length; i++){
+        if ( ((zzz-zz)==0 && Math.round(exploreMeshes[i].position.z)-zz==0 && (xxx-xx)*(Math.round(exploreMeshes[i].position.x)-xx)>0 && Math.abs(Math.round(exploreMeshes[i].position.x)-xx) < Math.abs(xxx-xx)) ||
+             ((xxx-xx)==0 && Math.round(exploreMeshes[i].position.x)-xx==0 && (zzz-zz)*(Math.round(exploreMeshes[i].position.z)-zz)>0 && Math.abs(Math.round(exploreMeshes[i].position.z)-zz) < Math.abs(zzz-zz)) ){
+          jump = true
+          break
+        }
+      }
+      if(!jump){
+        console.log('third bomb')
+        explore(xxx, zzz)
+        playerBody.third = false
+        playerBody.bomb--
+        playerBody.thirdAmmoMesh.geometry.dispose()
+        world.remove(playerBody.thirdAmmo)
+        scene.remove(playerBody.thirdAmmoMesh)
+      }
     }
   }
+  explore(xx, zz)
+  /*
   for(var i=0; i<boxes.length; i++){
     var xxx = boxes[i].position.x
     var yyy = boxes[i].position.y
@@ -103,13 +180,11 @@ function check_explore(ammoBody) {
       exploreMeshes.push(boxMeshes[i])
       exploreKind.push('box')
     }
-  }
-  for(var i=0; i < explores.length; i++){
-    explore(explores[i], exploreMeshes[i], exploreKind[i])
-  }
+  }*/
+  /*
   explores.length = 0;
   exploreMeshes.length = 0;
-  exploreKind.length = 0;
+  exploreKind.length = 0;*/
 }
 
 // shooting related settings
@@ -144,12 +219,12 @@ window.addEventListener('click', function(e) {
   
       // 子彈剛體與網格
       const ammoObj = new Ball(scale)
-      world.addBody(ammoObj.ammoBody)
       scene.add(ammoObj.ammoMesh)
-
+      world.addBody(ammoObj.ammoBody)
+/*
       explores.push(ammoObj.ammoBody)
       exploreMeshes.push(ammoObj.ammoMesh)
-      exploreKind.push('ammo')
+      exploreKind.push('ammo')*/
       
       var nowBomb = playerBody.first ? playerBody.second ? 3 : 2 :  1;
       if(nowBomb == 1){
@@ -171,19 +246,27 @@ window.addEventListener('click', function(e) {
 
       // 讓水球再產生過後5秒消失
       var id = setInterval(async function() {  
-        if((nowBomb==1 && playerBody.first) || (nowBomb==2 && playerBody.second) || (nowBomb==3 && playerBody.third)) await check_explore(ammoObj.ammoBody)
-        playerBody.bomb = playerBody.bomb - 1;
+        if((nowBomb==1 && playerBody.first) || 
+           (nowBomb==2 && playerBody.second) || 
+           (nowBomb==3 && playerBody.third)) await check_explore(ammoObj.ammoBody)
+        ammoObj.ammoMesh.geometry.dispose()
+        world.remove(ammoObj.ammoBody)
+        scene.remove(ammoObj.ammoMesh)
+        if (nowBomb==1 && playerBody.first) playerBody.first = false
+        else if (nowBomb==2 && playerBody.second) playerBody.second = false
+        else if (nowBomb==3 && playerBody.third) playerBody.third = false
+        playerBody.bomb = playerBody.bomb - 1
         clearInterval(id)
       }, 5000);
-
+/*
       getShootDir(e, shootDirection)
       // Move the ball outside the player sphere
       x += shootDirection.x * (0.75*scale)
       y = 0.5*scale
-      z += shootDirection.z * (0.75*scale)
-      ammoObj.ammoBody.position.set(x, y, z)
-      ammoObj.ammoMesh.position.set(x, y, z)
+      z += shootDirection.z * (0.75*scale)*/
+      ammoObj.ammoBody.position.set(Math.round(x), 0.5*scale, Math.round(z))
+      ammoObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
 
     }
   }
-})*/
+})
