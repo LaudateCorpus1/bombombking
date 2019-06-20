@@ -206,7 +206,7 @@ window.addEventListener('click', function(e) {
         if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x))
           return
       }
-      if(playerBody.bomb >= 3) return; 
+      if(playerBody.bomb >= 3 || Math.abs(Math.round(x))>7 || Math.abs(Math.round(z))>6) return; 
       console.log(x, y, z)
   
       // 子彈剛體與網格
