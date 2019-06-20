@@ -20,6 +20,21 @@ class Box {
     
         this.ammoMesh.castShadow = true
         this.ammoMesh.receiveShadow = true
+        this.walkOffset = 0
+        this.scaleOffset = 0
+    }
+
+    playAnimation() {
+        console.log("Play animation")
+        this.walkOffset += 0.0001
+        this.ammoMesh.rotation.y = Math.sin(this.walkOffset)*360
+        this.ammoMesh.position.y = 0.5 + Math.sin(this.walkOffset*5000)*0.05
+        //this.ammoMesh.rotation.x = Math.sin(this.walkOffset/2)*360
+        //this.ammoMesh.rotation.y = Math.sin(this.walkOffset) / 2
+        //let scaleRate = Math.sin(scaleHeadOffset)
+        //this.ammoMesh.scale.set(scaleRate, scaleRate, scaleRate)
+
+
     }
   }
   

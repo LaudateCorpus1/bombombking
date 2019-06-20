@@ -228,6 +228,8 @@ function render() {
   }
   for(var i=0; i<item.length; i++){
     if(item_exist[i] == false) continue;
+    //item[i].playAnimation()
+    item[i].playAnimation()
     var x = playerBody.position.x, z = playerBody.position.z;
     var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
