@@ -66,13 +66,13 @@ class Bazzi {
     this.Bazzi.add(this.feet)
     this.Bazzi.add(this.ear)
     this.Bazzi.name = 'Bazzi'
-    
+    /*
     const bodyShape = new CANNON.Box(
       new CANNON.Vec3(0.25 * scale_, 0.4 * scale_, 0.225 * scale_)
-    )
+    )*/
+    const bodyShape = new CANNON.Sphere(0.4)
     this.bodyBody = new CANNON.Body({
-      mass: 0,
-      position: new CANNON.Vec3(0, 0, 0)
+      mass: 50,
     })
     this.bodyBody.addShape(bodyShape)
     this.bodyBody.position.set(0, 0.4*scale_, 0)
@@ -83,8 +83,50 @@ class Bazzi {
         object.receiveShadow = true
       }
     })
+    this.map = []
+    this.dir = 0
+    this.velocity = 10
+    this.bodyBody.velocity.z = this.velocity
+    this.positionx = 0
+    this.positionz = 0
   }
   update() {
+    if (!this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-6)]){
+      this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-6)] = 0
+    }
+    if (Math.abs(this.bodyBody.position.z-this.positionz)<0.05){
+      if (this.dir==0){
+          this.map [ Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)+1) ] = 1
+      } else if (this.dir==1) {
+          this.map [ Math.round(this.bodyBody.position.x)-1-7 + 15*Math.round(this.bodyBody.position.z) ] = 1
+      } else if (this.dir==2) {
+          this.map [ Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-1) ] = 1
+      } else if (this.dir==3) {
+          this.map [ Math.round(this.bodyBody.position.x)+1-7 + 15*Math.round(this.bodyBody.position.z) ] = 1
+      }
+      if (this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)+1-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.z)+1)<=6){
+        this.bodyBody.velocity.z = this.velocity
+        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
+        this.dir = 0
+      } else if (this.map [Math.round(this.bodyBody.position.x)-1-7 + 15*(Math.round(this.bodyBody.position.z)-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.x)+1)<=7){
+        this.bodyBody.velocity.x = -this.velocity
+        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI / 2)
+        this.dir = 1
+      } else if (this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-1-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.z)-1)<=7){
+        this.bodyBody.velocity.z = -this.velocity
+        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
+        this.dir = 2
+      } else if (this.map [Math.round(this.bodyBody.position.x)+1-7 + 15*(Math.round(this.bodyBody.position.z)-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.x)-1)<=6){
+        this.bodyBody.velocity.x = this.velocity
+        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3 / 2)
+        this.dir = 3
+      }
+    }
+    this.positionz = this.bodyBody.position.z
+    this.positionx = this.bodyBody.position.x
+
+    this.BazziFeetWalk()
+    this.Bazzi.position.copy(this.bodyBody.position)
   }
   BazziFeetWalk() {
     this.walkOffset += 0.04

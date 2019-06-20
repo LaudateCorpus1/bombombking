@@ -7,6 +7,7 @@ let ex_now = 0
 let boxes = []
 let boxMeshes = []
 let map = 0
+let BazziObj
 var skip=0;
 const bgm = document.getElementById('bgm')
 bgm.volume = 0.8
@@ -144,8 +145,8 @@ function createBazzi() {/*
   BazziObj = new Bazzi(scale)
   world.addBody(BazziObj.bodyBody)
   scene.add(BazziObj.Bazzi)
-  BazziObj.Bazzi.position.set(-7, 0, 0)
-  BazziObj.bodyBody.position.set(-7, 0, 0)
+  BazziObj.Bazzi.position.set(7, 0.4, 6)
+  BazziObj.bodyBody.position.set(7, 0.4, 6)
 }
 
 // Three.js init setting
@@ -161,7 +162,7 @@ function init() {
   stats = initStats()
 
   createGround()
-  //createBazzi()
+  createBazzi()
   createScene()
   //createPointsScene()
 
@@ -181,6 +182,7 @@ function render() {
         
   if (controls.enabled) {
     world.step(dt)
+    BazziObj.update()
     // Update box mesh positions
     for (let i = 0; i < boxes.length; i++) {
       boxMeshes[i].position.copy(boxes[i].position)
