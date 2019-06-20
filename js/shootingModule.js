@@ -2,6 +2,8 @@ let explores = []
 let exploreMeshes = []
 let exploreKind = []
 let delete_ = []
+let item = []
+let item_exist = []
 
 let sphereShape = new CANNON.Sphere(1.5)
 
@@ -83,6 +85,14 @@ function explore(xx, zz) {
   }
   for (let i=0; i<4; i++){
     if(dir_len[i]==-1 || exk[i]=='n' || exk[i]=='Tree' || exk[i] == 'House') continue
+    if(Math.random() > 0.8){
+      let boxObj = new Box(scale);
+      scene.add(boxObj.ammoMesh)
+      boxObj.ammoBody.position.set(ex[i].position.x, 0.5, ex[i].position.z)
+      boxObj.ammoMesh.position.set(ex[i].position.x, 0.5, ex[i].position.z)
+      item.push(boxObj)
+      item_exist.push(true)
+    }
     var index = explores.indexOf(ex[i]);
     if (index> -1){
       explores.splice(index, 1);
@@ -224,7 +234,7 @@ window.addEventListener('click', function(e) {
         }
       }
       if(playerBody.bomb >= 3 || Math.abs(Math.round(x))>7 || Math.abs(Math.round(z))>6) return; 
-      console.log(x, y, z)
+      //console.log(x, y, z)
   
       // 子彈剛體與網格
       const ammoObj = new Ball(scale)

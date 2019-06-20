@@ -8,6 +8,7 @@ let boxes = []
 let boxMeshes = []
 var skip=0;
 const bgm = document.getElementById('bgm')
+const eatItem = document.getElementById('eatItem')
 bgm.volume = 0.8
 
 
@@ -185,26 +186,11 @@ function render() {
       boxMeshes[i].position.copy(boxes[i].position)
       boxMeshes[i].quaternion.copy(boxes[i].quaternion)
     }
-    /*
-    // Update shooting ball positions
-    if(playerBody.first) playerBody.firstAmmoMesh.position.copy(playerBody.firstAmmo.position)
-    if(playerBody.second) playerBody.secondAmmoMesh.position.copy(playerBody.secondAmmo.position)
-    if(playerBody.third) playerBody.thirdAmmoMesh.position.copy(playerBody.thirdAmmo.position)*/
   }
   controls.update(Date.now() - time)
   time = Date.now()
   // TWEEN.update()
   // explosion
-  /*
-  if (explosion) {
-    const len = explosion.length
-    if (len > 0) {
-      for (let i = 0; i < len; i++) {
-        if (explosion[i].times==playerBody.len) explosion[i].destroy()
-        if (explosion[i]) explosion[i].update()
-      }
-    }
-  }*/
   if (explosion) {
     const len = explosion.length
     if (len > 0) {
@@ -213,7 +199,16 @@ function render() {
       }
     }
   }
-
+  for(var i=0; i<item.length; i++){
+    if(item_exist[i] == false) continue;
+    var x = playerBody.position.x, z = playerBody.position.z;
+    var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
+    if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+      eatItem.play()
+      scene.remove(item[i].ammoMesh);
+      item_exist[i]=false;
+    }
+  }
   renderer.render(scene, camera)
 }
 
