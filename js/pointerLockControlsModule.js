@@ -19,12 +19,14 @@ function initPointerLockControls() {
       ) {
         controls.enabled = true
         blocker.style.display = 'none'
+        bgm.play()
       } else {
         controls.enabled = false
         blocker.style.display = '-webkit-box'
         blocker.style.display = '-moz-box'
         blocker.style.display = 'box'
         instructions.style.display = ''
+        bgm.pause()
       }
     }
     const pointerlockerror = function(event) {
