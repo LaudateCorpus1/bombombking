@@ -204,8 +204,28 @@ function getShootDir(event, targetVec) {
   targetVec.copy(raycaster.ray.direction)
 }
 
+window.addEventListener('mousedown', function(e) {
+  this.console.log("mouse down")
+  x = playerBody.position.x
+  y = playerBody.position.y
+  z = playerBody.position.z
+  getShootDir(e, shootDirection)
+  target_shootDirection = shootDirection
+  x += shootDirection.x * (sphereShape.radius*0.5)
+  z += shootDirection.z * (sphereShape.radius*0.5)
+  target_x = x
+  target_y = y
+  target_z = z
+ 
+  isTarget = true
+})
+window.addEventListener('mousemove', function(e){
+  getShootDir(e, shootDirection)
+  target_shootDirection = shootDirection
+})
 // shooting event
-window.addEventListener('click', function(e) {
+window.addEventListener('mouseup', function(e) {
+  isTarget = false
   if (controls.enabled == true) {
     // 取得目前玩家位置
     let x = playerBody.position.x
