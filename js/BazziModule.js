@@ -85,49 +85,111 @@ class Bazzi {
     })
     this.map = []
     this.dir = 0
+    this.scale = 0.4*scale_
     this.velocity = 10
     this.bodyBody.velocity.z = this.velocity
     this.positionx = 0
     this.positionz = 0
   }
   update() {
-    //Math.round(this.body.position.x)-7是當前橫列的index  z-6的部分是縱列(*15是因為MAP的橫列最大15)
-    //此程式碼意圖將走過的路都記錄成0
-    if (!this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-6)]){
-      this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-6)] = 0
-    }
-    //此程式碼讓Bazzi撞牆的時候能夠往空的地方走  紀錄為1代表此路不通
-    if (Math.abs(this.bodyBody.position.z-this.positionz)<0.05){
-      if (this.dir==0){
-          this.map [ Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)+1) ] = 1
-      } else if (this.dir==1) {
-          this.map [ Math.round(this.bodyBody.position.x)-1-7 + 15*Math.round(this.bodyBody.position.z) ] = 1
-      } else if (this.dir==2) {
-          this.map [ Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-1) ] = 1
-      } else if (this.dir==3) {
-          this.map [ Math.round(this.bodyBody.position.x)+1-7 + 15*Math.round(this.bodyBody.position.z) ] = 1
-      }
-      //這段是在偵測四周哪裡可以走
-      if (this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)+1-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.z)+1)<=6){
+
+    //這段是在偵測四周哪裡可以走
+    if(this.dir == 0){ //向+z方向走的話
+      //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
+      if (Math.abs(this.bodyBody.position.z-this.positionz)>0.002 && Math.random()>0.05){
         this.bodyBody.velocity.z = this.velocity
+        this.bodyBody.velocity.x = 0
         this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
         this.dir = 0
-      } else if (this.map [Math.round(this.bodyBody.position.x)-1-7 + 15*(Math.round(this.bodyBody.position.z)-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.x)+1)<=7){
+      } 
+      else{
+        //隨機向+x或-x方向走
+        if(Math.random()>0.5){
+          this.bodyBody.velocity.x = -this.velocity*2
+          this.bodyBody.velocity.z = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI/2)
+          this.dir = 1
+        }else{
+          this.bodyBody.velocity.x = this.velocity*2
+          this.bodyBody.velocity.z = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3/2)
+          this.dir = 3
+        }
+      }
+    }else if(this.dir == 1){ //向-x方向走的話
+      //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
+      if (Math.abs(this.bodyBody.position.x-this.positionx)>0.002 && Math.random()>0.05){
         this.bodyBody.velocity.x = -this.velocity
-        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI / 2)
+        this.bodyBody.velocity.z = 0
+        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI/2)
         this.dir = 1
-      } else if (this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-1-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.z)-1)<=7){
+      }
+      else{
+        //隨機向+z或-z方向走
+        if(Math.random()>0.5){
+          this.bodyBody.velocity.z = -this.velocity*2
+          this.bodyBody.velocity.x = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
+          this.dir = 2
+        }
+        else{
+          this.bodyBody.velocity.z = this.velocity*2
+          this.bodyBody.velocity.x = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
+          this.dir = 0
+        }
+      }
+    }else if(this.dir == 2){ //向-z方向走的話
+      //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
+      if(Math.abs(this.bodyBody.position.z-this.positionz)>0.002 && Math.random()>0.05){
         this.bodyBody.velocity.z = -this.velocity
+        this.bodyBody.velocity.x = 0
         this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
         this.dir = 2
-      } else if (this.map [Math.round(this.bodyBody.position.x)+1-7 + 15*(Math.round(this.bodyBody.position.z)-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.x)-1)<=6){
+      }
+      else{
+        //隨機向+x或-x方向走
+        if(Math.random()>0.5){
+          this.bodyBody.velocity.x = this.velocity*2
+          this.bodyBody.velocity.z = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3/2)
+          this.dir = 3
+        }
+        else{
+          this.bodyBody.velocity.x = -this.velocity*2
+          this.bodyBody.velocity.z = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI/2)
+          this.dir = 1
+        }
+      }
+    }
+    else if(this.dir == 3){ //向+x方向走的話
+      //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
+      if(Math.abs(this.bodyBody.position.x-this.positionx)>0.002 && Math.random()>0.05){
         this.bodyBody.velocity.x = this.velocity
-        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3 / 2)
+        this.bodyBody.velocity.z = 0
+        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3/2)
         this.dir = 3
+      }
+      else{
+        //隨機向+z或-z方向走
+        if(Math.random()>0.5){
+          this.bodyBody.velocity.z = this.velocity*2
+          this.bodyBody.velocity.x = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
+          this.dir = 0
+        }
+        else{
+          this.bodyBody.velocity.z = -this.velocity*2
+          this.bodyBody.velocity.x = 0
+          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
+          this.dir = 2
+        }
       }
     }
     this.positionz = this.bodyBody.position.z
     this.positionx = this.bodyBody.position.x
+    this.bodyBody.position.y = this.scale //避免睏寶飛起來
 
     this.BazziFeetWalk()
     this.Bazzi.position.copy(this.bodyBody.position)
