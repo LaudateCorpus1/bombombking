@@ -71,7 +71,7 @@ class Bazzi {
       new CANNON.Vec3(0.25 * scale_, 0.4 * scale_, 0.225 * scale_)
     )
     this.bodyBody = new CANNON.Body({
-      mass: 5 * scale_/3,
+      mass: 0,
       position: new CANNON.Vec3(0, 0, 0)
     })
     this.bodyBody.addShape(bodyShape)
@@ -83,6 +83,8 @@ class Bazzi {
         object.receiveShadow = true
       }
     })
+  }
+  update() {
   }
   BazziFeetWalk() {
     this.walkOffset += 0.04

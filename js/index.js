@@ -6,6 +6,7 @@ let explosion = []
 let ex_now = 0
 let boxes = []
 let boxMeshes = []
+let map = 0
 var skip=0;
 
 
@@ -183,26 +184,9 @@ function render() {
       boxMeshes[i].position.copy(boxes[i].position)
       boxMeshes[i].quaternion.copy(boxes[i].quaternion)
     }
-    /*
-    // Update shooting ball positions
-    if(playerBody.first) playerBody.firstAmmoMesh.position.copy(playerBody.firstAmmo.position)
-    if(playerBody.second) playerBody.secondAmmoMesh.position.copy(playerBody.secondAmmo.position)
-    if(playerBody.third) playerBody.thirdAmmoMesh.position.copy(playerBody.thirdAmmo.position)*/
   }
   controls.update(Date.now() - time)
   time = Date.now()
-  // TWEEN.update()
-  // explosion
-  /*
-  if (explosion) {
-    const len = explosion.length
-    if (len > 0) {
-      for (let i = 0; i < len; i++) {
-        if (explosion[i].times==playerBody.len) explosion[i].destroy()
-        if (explosion[i]) explosion[i].update()
-      }
-    }
-  }*/
   if (explosion) {
     const len = explosion.length
     if (len > 0) {
