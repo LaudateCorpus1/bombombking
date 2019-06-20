@@ -94,7 +94,7 @@ function check_explore(ammoBody) {
     }, 300);
     //handleEndGame();
   }*/
-  if(playerBody.first == true && playerBody.firstAmmo != ammoBody){
+  if(playerBody.first == true){
     var xxx = playerBody.firstAmmo.position.x
     var yyy = playerBody.firstAmmo.position.y
     var zzz = playerBody.firstAmmo.position.z
@@ -110,16 +110,16 @@ function check_explore(ammoBody) {
       }
       if(!jump){
         console.log('first bomb')
-        explore(xxx, zzz)
         playerBody.first = false
         playerBody.bomb--
+        check_explore(playerBody.firstAmmo)
         playerBody.firstAmmoMesh.geometry.dispose()
         world.remove(playerBody.firstAmmo)
         scene.remove(playerBody.firstAmmoMesh)
       }
     }
   }
-  if(playerBody.second == true && playerBody.secondAmmo != ammoBody){
+  if(playerBody.second == true){
     var xxx = playerBody.secondAmmo.position.x
     var yyy = playerBody.secondAmmo.position.y
     var zzz = playerBody.secondAmmo.position.z
@@ -135,16 +135,16 @@ function check_explore(ammoBody) {
       }
       if(!jump){
         console.log('second bomb')
-        explore(xxx, zzz)
         playerBody.second = false
         playerBody.bomb--
+        check_explore(playerBody.secondAmmo)
         playerBody.secondAmmoMesh.geometry.dispose()
         world.remove(playerBody.secondAmmo)
         scene.remove(playerBody.secondAmmoMesh)
       }
     }
   }
-  if(playerBody.third == true && playerBody.thirdAmmo != ammoBody){
+  if(playerBody.third == true){
     var xxx = playerBody.thirdAmmo.position.x
     var yyy = playerBody.thirdAmmo.position.y
     var zzz = playerBody.thirdAmmo.position.z
@@ -160,9 +160,9 @@ function check_explore(ammoBody) {
       }
       if(!jump){
         console.log('third bomb')
-        explore(xxx, zzz)
         playerBody.third = false
         playerBody.bomb--
+        check_explore(playerBody.thirdAmmo)
         playerBody.thirdAmmoMesh.geometry.dispose()
         world.remove(playerBody.thirdAmmo)
         scene.remove(playerBody.thirdAmmoMesh)
@@ -246,24 +246,29 @@ window.addEventListener('click', function(e) {
 
       // 讓水球再產生過後5秒消失
       var id = setInterval(async function() {  
-        if((nowBomb==1 && playerBody.first) || 
-           (nowBomb==2 && playerBody.second) || 
-           (nowBomb==3 && playerBody.third)) await check_explore(ammoObj.ammoBody)
+        if (nowBomb==1 && playerBody.first) {
+          playerBody.first = false
+          await check_explore(ammoObj.ammoBody)
+        }
+        else if (nowBomb==2 && playerBody.second) {
+          playerBody.second = false
+          await check_explore(ammoObj.ammoBody)
+        }
+        else if (nowBomb==3 && playerBody.third) {
+          playerBody.third = false
+          await check_explore(ammoObj.ammoBody)
+        } 
         ammoObj.ammoMesh.geometry.dispose()
         world.remove(ammoObj.ammoBody)
         scene.remove(ammoObj.ammoMesh)
-        if (nowBomb==1 && playerBody.first) playerBody.first = false
-        else if (nowBomb==2 && playerBody.second) playerBody.second = false
-        else if (nowBomb==3 && playerBody.third) playerBody.third = false
         playerBody.bomb = playerBody.bomb - 1
         clearInterval(id)
       }, 5000);
-/*
+
       getShootDir(e, shootDirection)
       // Move the ball outside the player sphere
-      x += shootDirection.x * (0.75*scale)
-      y = 0.5*scale
-      z += shootDirection.z * (0.75*scale)*/
+      x += shootDirection.x * (sphereShape.radius*0.5)
+      z += shootDirection.z * (sphereShape.radius*0.5)
       ammoObj.ammoBody.position.set(Math.round(x), 0.5*scale, Math.round(z))
       ammoObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
 
