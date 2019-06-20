@@ -253,6 +253,7 @@ window.addEventListener('mouseup', function(e) {
           return
         }
       }
+      //判斷水球數量、以及是否超出地圖
       if(playerBody.bomb >= 3 || Math.abs(Math.round(x))>7 || Math.abs(Math.round(z))>6) return; 
       //console.log(x, y, z)
   

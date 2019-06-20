@@ -1,7 +1,6 @@
 //001215003571707_063634300410000_002125033573737_363634300421212_121215003573737_262624330012121_454545003545454_121210300416161_838385033521212_212124300436363_808385003512120_001214330436360_808185003521200
 const valley = "001215003571707063634300410000002125033573737363634300421212121215003573737262624330012121454545003545454121210300416161838385033521212212124300436363808385003512120001214330436360808185003521200"
 
-
 const textureLoader = new THREE.TextureLoader()
 //LEGO
 let legoGeo
@@ -236,20 +235,22 @@ function createBush(x ,z, scale) {
 }
 
 function createScene() {
-  initTexture()
-  for(let now=0; now<195; now++){
-    if(valley[now]==1) createLego(now%15-7, 0.5, Math.floor(now/15)-6, 0xff0000, scale)
-    else if(valley[now]==2) createLego(now%15-7, 0.5, Math.floor(now/15)-6, 0xff8800, scale)
-    else if(valley[now]==3) createWooden(now%15-7, Math.floor(now/15)-6, scale)
-    else if(valley[now]==4) createTree(now%15-7, Math.floor(now/15)-6, scale)
-    else if(valley[now]==5) createBush(now%15-7, Math.floor(now/15)-6, scale)
-    else if(valley[now]==6) createHouse(now%15-7, Math.floor(now/15)-6, 0xff8800, scale)
-    else if(valley[now]==7) createHouse(now%15-7, Math.floor(now/15)-6, 0xfadc2e, scale)
-    else if(valley[now]==8) createHouse(now%15-7, Math.floor(now/15)-6, 0x51a7f5, scale)
-}
-  for(let i=-7; i<=7; i++){
-    for(let j=-6; j<=6; j++){
-      if(i<-1 | i>1) createLego_upper(i, -0.495, j, 0x7Eff00, scale)
+  if (map==0){
+    initTexture()
+    for(let now=0; now<195; now++){
+      if(valley[now]==1) createLego(now%15-7, 0.5, Math.floor(now/15)-6, 0xff0000, scale)
+      else if(valley[now]==2) createLego(now%15-7, 0.5, Math.floor(now/15)-6, 0xff8800, scale)
+      else if(valley[now]==3) createWooden(now%15-7, Math.floor(now/15)-6, scale)
+      else if(valley[now]==4) createTree(now%15-7, Math.floor(now/15)-6, scale)
+      else if(valley[now]==5) createBush(now%15-7, Math.floor(now/15)-6, scale)
+      else if(valley[now]==6) createHouse(now%15-7, Math.floor(now/15)-6, 0xff8800, scale)
+      else if(valley[now]==7) createHouse(now%15-7, Math.floor(now/15)-6, 0xfadc2e, scale)
+      else if(valley[now]==8) createHouse(now%15-7, Math.floor(now/15)-6, 0x51a7f5, scale)
+    }
+    for(let i=-7; i<=7; i++){
+      for(let j=-6; j<=6; j++){
+        if(i<-1 | i>1) createLego_upper(i, -0.495, j, 0x7Eff00, scale)
+      }
     }
   }
   createWall(0, 1)
