@@ -91,9 +91,12 @@ class Bazzi {
     this.positionz = 0
   }
   update() {
+    //Math.round(this.body.position.x)-7是當前橫列的index  z-6的部分是縱列(*15是因為MAP的橫列最大15)
+    //此程式碼意圖將走過的路都記錄成0
     if (!this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-6)]){
       this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)-6)] = 0
     }
+    //此程式碼讓Bazzi撞牆的時候能夠往空的地方走  紀錄為1代表此路不通
     if (Math.abs(this.bodyBody.position.z-this.positionz)<0.05){
       if (this.dir==0){
           this.map [ Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)+1) ] = 1
@@ -104,6 +107,7 @@ class Bazzi {
       } else if (this.dir==3) {
           this.map [ Math.round(this.bodyBody.position.x)+1-7 + 15*Math.round(this.bodyBody.position.z) ] = 1
       }
+      //這段是在偵測四周哪裡可以走
       if (this.map [Math.round(this.bodyBody.position.x)-7 + 15*(Math.round(this.bodyBody.position.z)+1-6)]!=1 && Math.abs(Math.round(this.bodyBody.position.z)+1)<=6){
         this.bodyBody.velocity.z = this.velocity
         this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
