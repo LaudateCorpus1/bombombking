@@ -10,8 +10,15 @@ let map = 0
 let BazziObj
 var skip=0;
 const bgm = document.getElementById('bgm')
+const eatItem = document.getElementById('eatItem')
 bgm.volume = 0.8
 
+let isTarget = false
+let targetObj
+let target_x
+let target_y
+let target_z
+let target_shootDirection
 
 const scale = 1;
 
@@ -149,6 +156,22 @@ function createBazzi() {/*
   BazziObj.bodyBody.position.set(7, 0.4, 6)
 }
 
+function createTarget() {
+  x = playerBody.position.x
+  y = playerBody.position.y
+  z = playerBody.position.z
+  x += target_shootDirection.x * (sphereShape.radius*0.5)
+  z += target_shootDirection.z * (sphereShape.radius*0.5)
+  for(var i=0; i < explores.length; i++){
+    if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x)){
+      if (exploreKind[i] != 'Bush') return
+    }
+  }
+  if(Math.abs(Math.round(x))>7 || Math.abs(Math.round(z))>6) return;
+  targetObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
+  scene.add(targetObj.ammoMesh)
+}
+
 // Three.js init setting
 function init() {
   initCannon()
@@ -165,6 +188,8 @@ function init() {
   createBazzi()
   createScene()
   //createPointsScene()
+
+  targetObj = new Target(scale)
 
   document.body.appendChild(renderer.domElement)
 }
@@ -191,6 +216,8 @@ function render() {
   }
   controls.update(Date.now() - time)
   time = Date.now()
+  // TWEEN.update()
+  // explosion
   if (explosion) {
     const len = explosion.length
     if (len > 0) {
@@ -198,6 +225,23 @@ function render() {
         if (explosion[i]) explosion[i].update()
       }
     }
+  }
+  for(var i=0; i<item.length; i++){
+    if(item_exist[i] == false) continue;
+    var x = playerBody.position.x, z = playerBody.position.z;
+    var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
+    if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+      eatItem.play()
+      scene.remove(item[i].ammoMesh);
+      item_exist[i]=false;
+    }
+  }
+  
+  if (isTarget) {
+    createTarget()
+  }
+  else{
+    scene.remove(targetObj.ammoMesh)
   }
 
   renderer.render(scene, camera)
