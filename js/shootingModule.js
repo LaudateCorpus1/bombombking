@@ -105,7 +105,7 @@ function explore(xx, zz) {
     world.remove(ex[i])
     scene.remove(exm[i])
   }
-  console.log(ammos)
+  //console.log(ammos)
 }
 //x是玩家的座標 
 //xx是水球的座標

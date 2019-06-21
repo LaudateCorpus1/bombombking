@@ -1,0 +1,66 @@
+body{
+    background-image: url("../img/menuback.png");
+    background-size: cover;
+}
+#logo{
+    position: fixed;
+    top: 88px;
+}
+#btn1{
+    position: fixed;
+    background-color: rgba(30%,0%,0%,0);
+    border: none;
+    width: 240px;
+    height: 64px;
+    font-size:30px;
+    font-family: 'Gloria Hallelujah', cursive;
+    top: 170px;
+    left: 480px;
+}
+#btn2{
+    position: fixed;
+    background-color: rgba(30%,0%,0%,0);
+    border: none;
+    width: 240px;
+    height: 64px;
+    font-size:30px;
+    font-family: 'Gloria Hallelujah', cursive;
+    top: 170px;
+    left: 950px;
+}
+#bazzi{
+    position: fixed;
+    bottom: 0px;
+}
+#rule{
+    position: fixed;
+    top: 25px;
+    z-index:90;
+}
+#map{
+    position: fixed;
+    top: 25px;
+    z-index:90;
+}
+#ruleclose{
+    background-image: url("../img/close.png");
+    background-size: cover;
+    border: none;
+    width:30px;
+    height:30px;
+    position: fixed;
+    top: 30px;
+    right: 250px;
+    z-index:100;
+}
+#map1{
+    background-image: url("../img/map1.png");
+    background-size: cover;
+    border: none;
+    width:346px;
+    height:180px;
+    position: fixed;
+    top: 150px;
+    left: 300px;
+    z-index:100;
+}
