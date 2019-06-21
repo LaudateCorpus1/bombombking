@@ -207,7 +207,7 @@ function check_explore(ammoBody, whose) {
       }
     }
   }
-  for (let i=0; i<BazziObj.length; i++){
+  for (var i=0; i<BazziObj.length; i++){
     let Bx = BazziObj[i].bodyBody.position.x
     let By = BazziObj[i].bodyBody.position.y;
     let Bz = BazziObj[i].bodyBody.position.z;

@@ -139,7 +139,6 @@ class Bazzi {
       }
       for (let i=0; i<4; i++) if(Isok[i]) count++
     }
-    console.log(Isok)
     if(this.BazziFirst == false && !this.BazziFirstAmmo && count!=3){
       this.BazziFirst = true
       this.putBall();
@@ -292,6 +291,14 @@ class Bazzi {
     this.dir = direction
   }
   BazziFeetWalk() {
+    this.walkOffset += 0.4
+    
+    this.foot1.rotation.x = Math.sin(this.walkOffset) / 2 // 右手
+    this.foot2.rotation.x = -Math.sin(this.walkOffset) / 2 // 左手
+    this.foot3.rotation.x = Math.sin(this.walkOffset) / 2 // 左腳
+    this.foot4.rotation.x = -Math.sin(this.walkOffset) / 2 // 右腳
+  }
+  Bubbling() {
     this.walkOffset += 0.4
     
     this.foot1.rotation.x = Math.sin(this.walkOffset) / 2 // 右手
