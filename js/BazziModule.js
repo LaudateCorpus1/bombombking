@@ -2,6 +2,7 @@
 var BazziFirst = false;
 var BazziFirstFlag = false;
 var BazziFirstAmmo;
+//var Bx, Bz;
 var counter = 0
 class Bazzi {
   constructor(scale_) {
@@ -104,7 +105,7 @@ class Bazzi {
     }
 
     // 子彈剛體與網格
-    const ammoObj = new BazziBall(scale)
+    const ammoObj = new Ball(scale)
     
     BazziFirstAmmo = ammoObj
     var temp = 0;
@@ -134,7 +135,6 @@ class Bazzi {
   }
   update(exploreMeshes, ammos) {
     var dir = this.Mapping(exploreMeshes, ammos)
-    
     //這段是在偵測四周哪裡可以走
     if(this.dir == 4){ //向+z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
@@ -262,6 +262,8 @@ class Bazzi {
     }
     this.positionz = this.bodyBody.position.z
     this.positionx = this.bodyBody.position.x
+    //Bx = this.bodyBody.position.x
+    //Bz = this.bodyBody.position.z
     this.bodyBody.position.y = this.scale //避免睏寶飛起來
 
     this.bodyBody.velocity.x = (this.dir==1 || this.dir==3) ? (this.dir-2) * this.velocity: 0
@@ -300,7 +302,6 @@ class Bazzi {
       if ( obj==index+1 ||obj==index+2 || obj==index+16 || obj==index-14 ) dir[3] = 3
       if ( obj==index-1 || obj==index-2 || obj==index-16 || obj==index+14 ) dir[1] = 3
       if ( obj==index+15 || obj==index+30 || obj==index+16 || obj==index+14 ) {
-        console.log("S")
         dir[0] = 3
       }
       if ( obj==index-15 || obj==index-30 || obj==index-16 || obj==index-14 ) dir[2] = 3

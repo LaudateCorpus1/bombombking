@@ -18,6 +18,6 @@ class Ball {
     //this.ammoBody.position.y = 0.5 + Math.sin(this.walkOffset*1000)*0.1
     let scaleRate = this.walkOffset*1.5+1//+Math.sin(this.walkOffset*500)*0.1
     this.ammoMesh.scale.set(scaleRate, scaleRate, scaleRate)
-    console.log("Play animation", this.ammoMesh.position.y)
+    //console.log("Play animation", this.ammoMesh.position.y)
   }
 }

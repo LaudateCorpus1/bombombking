@@ -111,20 +111,31 @@ function explore(xx, zz) {
 //xx是水球的座標
 //xxx是其他可能被炸掉的東西的座標
 function check_explore(ammoBody, whose) {
-  if(whose == 'player')playerBody.bomb--
+  if(whose == 'player') playerBody.bomb--
   const xx = ammoBody.position.x
   const yy = ammoBody.position.y
   const zz = ammoBody.position.z
   var x = playerBody.position.x;
   var y = playerBody.position.y;
-  var z = playerBody.position.z;/*
-  if((x-xx)*(x-xx) + (y-yy)*(y-yy) + (z-zz)*(z-zz) <= 125*scale*scale){
+  var z = playerBody.position.z;
+  //here
+  if( (Math.abs(x-xx)<=playerBody.len && Math.round(z)==zz) || (Math.abs(z-zz)<=playerBody.len && Math.round(x)==xx) ){
     var die = setInterval(function(){
       handleEndGame();
       clearInterval(die);
     }, 300);
-    //handleEndGame();
-  }*/
+  }
+  for(let i=0; i<num; i++){
+    let Bx = BazziObj[i].bodyBody.position.x
+    let Bz = BazziObj[i].bodyBody.position.z;
+    if( (Math.abs(Bx-xx)<=playerBody.len && Math.round(Bz)==zz) || (Math.abs(Bz-zz)<=playerBody.len && Math.round(Bx)==xx) ){
+      var die = setInterval(function(){
+        handleEndGame();
+        clearInterval(die);
+      }, 300);
+    }
+  }
+  
   if(playerBody.first == true){
     var xxx = playerBody.firstAmmo.position.x
     var yyy = playerBody.firstAmmo.position.y

@@ -7,7 +7,8 @@ let ex_now = 0
 let boxes = []
 let boxMeshes = []
 let map = 0
-let BazziObj
+var BazziObj = []
+var num = 0
 var skip=0;
 const bgm = document.getElementById('bgm')
 const eatItem = document.getElementById('eatItem')
@@ -142,16 +143,17 @@ function createGround() {
   scene.add(ground)
 }
 
-function createBazzi() {/*
+function createBazzi(x, z) {/*
   creeperObj = new Creeper()
   // tweenHandler()
   creeperObj.creeper.position.set(10, 0, 0)
   scene.add(creeperObj.creeper)*/
-  BazziObj = new Bazzi(scale)
-  world.addBody(BazziObj.bodyBody)
-  scene.add(BazziObj.Bazzi)
-  BazziObj.Bazzi.position.set(7, 0.4, 6)
-  BazziObj.bodyBody.position.set(7, 0.4, 6)
+  BazziObj[num] = new Bazzi(scale)
+  world.addBody(BazziObj[num].bodyBody)
+  scene.add(BazziObj[num].Bazzi)
+  BazziObj[num].Bazzi.position.set(x, 0.4, z)
+  BazziObj[num].bodyBody.position.set(x, 0.4, z)
+  num++
 }
 
 function createTarget() {
@@ -183,13 +185,19 @@ function init() {
   stats = initStats()
 
   createGround()
-  createBazzi()
+  createBazzi(6, -5) // -7, -6 // -6, 5 // 7, 6
+  createBazzi(-7, -6)
+  createBazzi(-6, 5)
   createScene()
   //createPointsScene()
 
   targetObj = new Target(scale)
 
   document.body.appendChild(renderer.domElement)
+}
+
+function handleEndGame() {
+  window.location.replace('./result.html')
 }
 
 function render() {
@@ -205,7 +213,7 @@ function render() {
         
   if (controls.enabled) {
     world.step(dt)
-    BazziObj.update(exploreMeshes, ammos)
+    for(let i=0; i<num; i++) BazziObj[i].update(exploreMeshes, ammos)
     // Update box mesh positions
     for (let i = 0; i < boxes.length; i++) {
       boxMeshes[i].position.copy(boxes[i].position)
@@ -242,19 +250,22 @@ function render() {
         },5000)
       }
       else if(item[i].boxType == 1) {
-        
+        if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
       }
-      
+      else if(item[i].boxType == 0){
+        if(playerBody.len < 3) playerBody.len = playerBody.len + 1;
+      }
       eatItem.play()
-      if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
       scene.remove(item[i].ammoMesh);
       item_exist[i]=false;
     }
-    x = BazziObj.Bazzi.position.x;
-    z = BazziObj.Bazzi.position.z;
-    if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
-      scene.remove(item[i].ammoMesh);
-      item_exist[i]=false;
+    for(let i=0; i<num; i++){
+      x = BazziObj[i].Bazzi.position.x;
+      z = BazziObj[i].Bazzi.position.z;
+      if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+        scene.remove(item[i].ammoMesh);
+        item_exist[i]=false;
+      }
     }
     if(playerBody.first == true){
       x = playerBody.firstAmmo.position.x;
