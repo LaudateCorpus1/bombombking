@@ -209,7 +209,7 @@ function render() {
         
   if (controls.enabled) {
     world.step(dt)
-    BazziObj.update()
+    BazziObj.update(exploreMeshes, ammos)
     // Update box mesh positions
     for (let i = 0; i < boxes.length; i++) {
       boxMeshes[i].position.copy(boxes[i].position)
