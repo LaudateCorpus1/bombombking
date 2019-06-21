@@ -10,5 +10,14 @@ class Ball {
 
     this.ammoMesh.castShadow = true
     this.ammoMesh.receiveShadow = true
+    this.walkOffset = 0
+  }
+  playAnimation() {
+    this.walkOffset += 0.001
+    //this.ammoMesh.position.y = 0.5 + Math.sin(this.walkOffset*1000)*0.1
+    //this.ammoBody.position.y = 0.5 + Math.sin(this.walkOffset*1000)*0.1
+    let scaleRate = this.walkOffset*5+1//+Math.sin(this.walkOffset*500)*0.1
+    this.ammoMesh.scale.set(scaleRate, scaleRate, scaleRate)
+    console.log("Play animation", this.ammoMesh.position.y)
   }
 }

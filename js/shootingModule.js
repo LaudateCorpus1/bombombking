@@ -258,9 +258,9 @@ window.addEventListener('mouseup', function(e) {
       //console.log(x, y, z)
   
       // 子彈剛體與網格
-      const ammoObj = new Ball(scale)
-      scene.add(ammoObj.ammoMesh)
-      world.addBody(ammoObj.ammoBody)
+      const ammoObj = new Ball(0.5)
+      //scene.add(ammoObj.ammoMesh)
+      //world.addBody(ammoObj.ammoBody)
 /*
       explores.push(ammoObj.ammoBody)
       exploreMeshes.push(ammoObj.ammoMesh)
@@ -268,18 +268,27 @@ window.addEventListener('mouseup', function(e) {
       
       var nowBomb = playerBody.first ? playerBody.second ? 3 : 2 :  1;
       if(nowBomb == 1){
+        playerBody.firstObj = ammoObj
         playerBody.firstAmmo = ammoObj.ammoBody;
         playerBody.firstAmmoMesh = ammoObj.ammoMesh;
+        scene.add(playerBody.firstObj.ammoMesh)
+        world.addBody(playerBody.firstObj.ammoBody)
         playerBody.first = true;
       }
       else if(nowBomb == 2){
+        playerBody.secondObj = ammoObj
         playerBody.secondAmmo = ammoObj.ammoBody;
         playerBody.secondAmmoMesh = ammoObj.ammoMesh;
+        scene.add(playerBody.secondObj.ammoMesh)
+        world.addBody(playerBody.secondObj.ammoBody)
         playerBody.second = true;
       }
       else if(nowBomb == 3){
+        playerBody.thirdObj = ammoObj
         playerBody.thirdAmmo = ammoObj.ammoBody;
         playerBody.thirdAmmoMesh = ammoObj.ammoMesh;
+        scene.add(playerBody.thirdObj.ammoMesh)
+        world.addBody(playerBody.thirdObj.ammoBody)
         playerBody.third = true;
       }
       playerBody.bomb = playerBody.bomb + 1;

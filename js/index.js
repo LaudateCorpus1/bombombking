@@ -238,6 +238,10 @@ function render() {
       item_exist[i]=false;
     }
   }
+
+  if(playerBody.first) {
+    playerBody.firstObj.playAnimation()
+  }
   
   if (isTarget) {
     createTarget()
