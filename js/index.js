@@ -16,10 +16,6 @@ const notification = document.getElementById('notification')
 bgm.volume = 0.8
 
 let isTarget = false
-let targetObj
-let target_x
-let target_y
-let target_z
 let target_shootDirection
 
 const scale = 1;
@@ -236,6 +232,19 @@ function render() {
     var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
       notification.innerText += "You get a tool box " + item[i].boxType + " \n"
+      
+      // tool of jump one time
+      if(item[i].boxType == 2){
+        controls.setJumpVelocity(20)
+        var toolToJump = setInterval(function() {
+          controls.setJumpVelocity(0)
+          clearInterval(toolToJump)
+        },5000)
+      }
+      else if(item[i].boxType == 1) {
+        
+      }
+      
       eatItem.play()
       scene.remove(item[i].ammoMesh);
       item_exist[i]=false;
