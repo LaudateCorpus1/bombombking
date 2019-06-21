@@ -207,7 +207,7 @@ function render() {
         
   if (controls.enabled) {
     world.step(dt)
-    BazziObj.update(exploreMeshes, exploreKind)
+    BazziObj.update(exploreMeshes)
     // Update box mesh positions
     for (let i = 0; i < boxes.length; i++) {
       boxMeshes[i].position.copy(boxes[i].position)

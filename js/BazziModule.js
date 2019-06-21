@@ -91,7 +91,7 @@ class Bazzi {
     this.positionx = 0
     this.positionz = 0
   }
-  update(exploreMeshes, exploreKind) {
+  update(exploreMeshes) {
     //這段是在偵測四周哪裡可以走
     if(this.dir == 4){ //向+z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
@@ -99,7 +99,7 @@ class Bazzi {
         this.Turn(4)
       } 
       else{
-        var dir = this.Mapping(exploreMeshes, exploreKind)
+        var dir = this.Mapping(exploreMeshes)
         dir[0] = 1
         //隨機向+x或-x方向走
         if (dir[1]==0 && dir[3]==0){
@@ -116,7 +116,7 @@ class Bazzi {
         this.Turn(1)
       }
       else{
-        var dir = this.Mapping(exploreMeshes, exploreKind)
+        var dir = this.Mapping(exploreMeshes)
         dir[1] = 1
         //隨機向+z或-z方向走
         if (dir[2]==0 && dir[0]==0){
@@ -133,7 +133,7 @@ class Bazzi {
         this.Turn(2)
       }
       else{
-        var dir = this.Mapping(exploreMeshes, exploreKind)
+        var dir = this.Mapping(exploreMeshes)
         dir[2] = 1
         //隨機向+x或-x方向走
         if (dir[1]==0 && dir[3]==0){
@@ -151,7 +151,7 @@ class Bazzi {
         this.Turn(3)
       }
       else{
-        var dir = this.Mapping(exploreMeshes, exploreKind)
+        var dir = this.Mapping(exploreMeshes)
         dir[3] = 1
         //隨機向+z或-z方向走
         if (dir[2]==0 && dir[0]==0){
@@ -172,7 +172,7 @@ class Bazzi {
     this.BazziFeetWalk()
     this.Bazzi.position.copy(this.bodyBody.position)
   }
-  Mapping(exploreMeshes, exploreKind){
+  Mapping(exploreMeshes){
     let dir = [0, 0, 0, 0]
     var index = Math.round(this.bodyBody.position.x)+7 + 15*(Math.round(this.bodyBody.position.z)+6)
     if ( Math.round(this.bodyBody.position.x)+7==14 ) dir[3] = 1
@@ -181,8 +181,6 @@ class Bazzi {
     if ( Math.round(this.bodyBody.position.z)+6==12 ) dir[0] = 1
     for(var i=0; i < exploreMeshes.length; i++){
       var obj = Math.round(exploreMeshes[i].position.x)+7 + 15*(Math.round(exploreMeshes[i].position.z)+6)
-      if (exploreKind[i]=='Bush') console.log(index)
-      if (exploreKind[i]=='Bush') continue
       if ( obj==index+1 ) dir[3] = 1
       else if ( obj==index-1 ) dir[1] = 1
       else if ( obj==index+15 ) dir[0] = 1
