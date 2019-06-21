@@ -6,9 +6,7 @@ let explosion = []
 let ex_now = 0
 let boxes = []
 let boxMeshes = []
-let map = 0
-var BazziObj
-var num = 0
+let BazziObj
 var skip=0;
 const bgm = document.getElementById('bgm')
 const eatItem = document.getElementById('eatItem')
@@ -143,7 +141,7 @@ function createGround() {
   scene.add(ground)
 }
 
-function createBazzi(x, z) {/*
+function createBazzi(x ,z) {/*
   creeperObj = new Creeper()
   // tweenHandler()
   creeperObj.creeper.position.set(10, 0, 0)
@@ -184,9 +182,6 @@ function init() {
   stats = initStats()
 
   createGround()
-  //createBazzi(6, -5) // -7, -6 // -6, 5 // 7, 6
-  createBazzi(-7, -6)
-  //createBazzi(-6, 5)
   createScene()
   //createPointsScene()
 
@@ -234,15 +229,14 @@ function render() {
   }
   for(var i=0; i<item.length; i++){
     if(item_exist[i] == false) continue;
-    //item[i].playAnimation()
     item[i].playAnimation()
     var x = playerBody.position.x, z = playerBody.position.z;
     var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
-      notification.innerText += "You get a tool box " + item[i].boxType + " \n"
-      
+      if(item[i].boxType == 1) notification.innerText += "Get one more water ball!\n"
+      else if(item[i].boxType == 0) notification.innerText += "Press SPACE to jump!\n"
       // tool of jump one time
-      if(item[i].boxType == 2){
+      if(item[i].boxType == 0){
         controls.setJumpVelocity(20)
         var toolToJump = setInterval(function() {
           controls.setJumpVelocity(0)
@@ -251,9 +245,6 @@ function render() {
       }
       else if(item[i].boxType == 1) {
         if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
-      }
-      else if(item[i].boxType == 0){
-        //if(playerBody.len < 3) playerBody.len = playerBody.len + 1;
       }
       eatItem.play()
       scene.remove(item[i].ammoMesh);

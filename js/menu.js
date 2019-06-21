@@ -21,5 +21,5 @@ function start(){
     document.getElementById('ruleclose').style.display = ""
 }
 function gamestart(){
-    window.location.href = "index.html";
+    window.location.href = "valley.html";
 }

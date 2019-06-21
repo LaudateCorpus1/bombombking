@@ -7,7 +7,7 @@
 </head>
 <body>
   <div id="stats"></div>
-  <audio id="bgm" src="./music/village_bgm.mp3" autoplay loop></audio>
+  <audio id="bgm" src="./music/factory_bgm.mp3" autoplay loop></audio>
   <audio id="eatItem" src="./music/eat_item.mp3"></audio>
   <div id="blocker">
     <div id="instructions">
@@ -17,6 +17,16 @@
     </div>
   </div>
   <div id="notification"></div>
+
+  <script>
+    let map = 1
+  </script>
+  <script src="./js/factory/blockModule.js"></script>
+  <script src="./js/factory/columnModule.js"></script>
+  <script src="./js/factory/floorModule.js"></script>
+  <script src="./js/factory/glassModule.js"></script>
+  <script src="./js/factory/ironModule.js"></script>
+  <script src="./js/factory/warnModule.js"></script>
 
   <script src="./lib/three.min.js"></script><!-- r98 -->
   <script src="./lib/cannon.min.js"></script><!-- 0.6.2 -->
