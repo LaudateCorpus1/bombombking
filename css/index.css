@@ -41,3 +41,13 @@ body {
   text-align: center;
   cursor: pointer;
 }
+
+#notification {
+  z-index: 1;
+  color: white;
+  font-weight: 300;
+  font-size: 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
