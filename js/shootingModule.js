@@ -98,6 +98,7 @@ function explore(xx, zz) {
       explores.splice(index, 1);
       exploreMeshes.splice(index, 1);
       exploreKind.splice(index, 1);
+      console.log("box delete")
     }
     if(exm[i].geometry) exm[i].geometry.dispose()
     world.remove(ex[i])
