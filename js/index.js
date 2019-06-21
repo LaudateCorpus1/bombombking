@@ -6,7 +6,6 @@ let explosion = []
 let ex_now = 0
 let boxes = []
 let boxMeshes = []
-let map = 0
 let BazziObj
 var skip=0;
 const bgm = document.getElementById('bgm')
@@ -142,7 +141,7 @@ function createGround() {
   scene.add(ground)
 }
 
-function createBazzi() {/*
+function createBazzi(x ,z) {/*
   creeperObj = new Creeper()
   // tweenHandler()
   creeperObj.creeper.position.set(10, 0, 0)
@@ -150,8 +149,8 @@ function createBazzi() {/*
   BazziObj = new Bazzi(scale)
   world.addBody(BazziObj.bodyBody)
   scene.add(BazziObj.Bazzi)
-  BazziObj.Bazzi.position.set(7, 0.4, 6)
-  BazziObj.bodyBody.position.set(7, 0.4, 6)
+  BazziObj.Bazzi.position.set(x, 0.4, z)
+  BazziObj.bodyBody.position.set(x, 0.4, z)
 }
 
 function createTarget() {
@@ -183,7 +182,6 @@ function init() {
   stats = initStats()
 
   createGround()
-  createBazzi()
   createScene()
   //createPointsScene()
 

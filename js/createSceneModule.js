@@ -1,5 +1,7 @@
 //001215003571707_063634300410000_002125033573737_363634300421212_121215003573737_262624330012121_454545003545454_121210300416161_838385033521212_212124300436363_808385003512120_001214330436360_808185003521200
 const valley = "001215003571707063634300410000002125033573737363634300421212121215003573737262624330012121454545003545454121210300416161838385033521212212124300436363808385003512120001214330436360808185003521200"
+//000622263326000_010181818181010_232322000233322_454545404545454_223232242233232_018181252181810_002228243822200_627321252123726_222268040862232_726321000123627_222268242862222_607321222122706_000262242362000
+const factory = "000622263326000010181818181010232322000233322454545404545454223232242233232018181252181810002228243822200627321252123726222268040862232726321000123627222268242862222607321222122706000262242362000"
 
 const textureLoader = new THREE.TextureLoader()
 //LEGO
@@ -23,8 +25,193 @@ let boxShape_tree
 //bush
 let boxGeo_bush
 const creeperMat_bush = new THREE.MeshPhongMaterial({ color: 0x00B500 })
+//floor
+let boxGeo_floor
+let floorMat
+//warn
+let boxGeo_warn
+let headMaterials_warn
+let boxShape_warn
+//block
+const downMat = new THREE.MeshPhongMaterial({ color: 0xE84400 })
+let blockGeo
+let downGeo
+let blockMat
+let blockShape
+//iron
+let IronGeo
+let ironShape
 
-function initTexture() {
+function initfactory() {
+  //floor
+  boxGeo_floor = new THREE.BoxGeometry(1*scale, 1*scale, 1*scale)
+  const floorMap = textureLoader.load('./img/floor.png')
+  floorMat = new THREE.MeshPhongMaterial({
+    map: floorMap
+  })
+  //warn
+  boxGeo_warn = new THREE.BoxGeometry(1*scale, 1.2*scale, 1*scale)
+  const headMap_warn = textureLoader.load('./img/warn_up.png')
+  const skinMap_warn = textureLoader.load('./img/warn_other.png')
+  headMaterials_warn = []
+  for (let i = 0; i < 6; i++) {
+    let map
+    if (i === 2 | i === 3) map = headMap_warn
+    else map = skinMap_warn
+    headMaterials_warn.push(new THREE.MeshPhongMaterial({ map: map }))
+  } 
+  boxShape_warn = new CANNON.Box(
+    new CANNON.Vec3(0.45 * scale, 0.6 * scale, 0.45 * scale)
+  )
+  //block
+  blockGeo = new THREE.CylinderGeometry(0.01*scale, 0.35*scale, 1*scale)
+  const blockMap = textureLoader.load('./img/three.png')
+  blockMat = new THREE.MeshPhongMaterial({
+    map: blockMap
+  })
+  downGeo = new THREE.BoxGeometry(0.8*scale, 0.05*scale, 0.8*scale)
+  blockShape = new CANNON.Box(
+    new CANNON.Vec3(0.25 * scale, 0.5 * scale, 0.25 * scale)
+  )
+  //iron
+  IronGeo = new THREE.BoxGeometry(0.9*scale, 0.9*scale, 0.9*scale)
+  const col_x = new THREE.BoxGeometry(1*scale,0.1*scale,  0.1*scale)
+  const col_y = new THREE.BoxGeometry(0.1*scale, 1*scale, 0.1*scale)
+  const col_z = new THREE.BoxGeometry(0.1*scale, 0.1*scale, 1*scale)
+
+  let up1 = new THREE.Mesh(col_x, branchMat)
+  up1.position.set(0, 0.45*scale, 0.45*scale)
+  let up2 = up1.clone()
+  up2.position.set(0, 0.45*scale, -0.45*scale)
+  let up5 = up1.clone()
+  up5.position.set(0, 0.45*scale, 0.15*scale)
+  let up6 = up1.clone()
+  up6.position.set(0, 0.45*scale, -0.15*scale)
+  let up3 = new THREE.Mesh(col_z, branchMat)
+  up3.position.set(0.45*scale, 0.45*scale, 0)
+  let up4 = up3.clone()
+  up4.position.set(-0.45*scale, 0.45*scale, 0)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  up3.updateMatrix()
+  up4.updateMatrix()
+  up5.updateMatrix()
+  up6.updateMatrix()
+  IronGeo.merge(up1.geometry, up1.matrix)
+  IronGeo.merge(up2.geometry, up2.matrix)
+  IronGeo.merge(up3.geometry, up3.matrix)
+  IronGeo.merge(up4.geometry, up4.matrix)
+  IronGeo.merge(up5.geometry, up5.matrix)
+  IronGeo.merge(up6.geometry, up6.matrix)
+  up1 = new THREE.Mesh(col_x, branchMat)
+  up1.position.set(0, -0.45*scale, 0.45*scale)
+  up2 = up1.clone()
+  up2.position.set(0, -0.45*scale, -0.45*scale)
+  up3 = new THREE.Mesh(col_z, branchMat)
+  up3.position.set(0.45*scale, -0.45*scale, 0)
+  up4 = up3.clone()
+  up4.position.set(-0.45*scale, -0.45*scale, 0)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  up3.updateMatrix()
+  up4.updateMatrix()
+  IronGeo.merge(up1.geometry, up1.matrix)
+  IronGeo.merge(up2.geometry, up2.matrix)
+  IronGeo.merge(up3.geometry, up3.matrix)
+  IronGeo.merge(up4.geometry, up4.matrix)
+  up1 = new THREE.Mesh(col_y, branchMat)
+  up1.position.set(0.45*scale, 0, 0.45*scale)
+  up2 = up1.clone()
+  up2.position.set(0.45*scale, 0, -0.45*scale)
+  up3 = up1.clone()
+  up3.position.set(-0.45*scale, 0, -0.45*scale)
+  up4 = up1.clone()
+  up4.position.set(-0.45*scale, 0, 0.45*scale)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  up3.updateMatrix()
+  up4.updateMatrix()
+  IronGeo.merge(up1.geometry, up1.matrix)
+  IronGeo.merge(up2.geometry, up2.matrix)
+  IronGeo.merge(up3.geometry, up3.matrix)
+  IronGeo.merge(up4.geometry, up4.matrix)
+  up1 = new THREE.Mesh(col_y, branchMat)
+  up1.position.set(0.45*scale, 0, 0.15*scale)
+  up2 = up1.clone()
+  up2.position.set(0.45*scale, 0, -0.15*scale)
+  up3 = up1.clone()
+  up3.position.set(0.15*scale, 0, -0.45*scale)
+  up4 = up1.clone()
+  up4.position.set(-0.15*scale, 0, -0.45*scale)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  up3.updateMatrix()
+  up4.updateMatrix()
+  IronGeo.merge(up1.geometry, up1.matrix)
+  IronGeo.merge(up2.geometry, up2.matrix)
+  IronGeo.merge(up3.geometry, up3.matrix)
+  IronGeo.merge(up4.geometry, up4.matrix)
+  up1 = new THREE.Mesh(col_y, branchMat)
+  up1.position.set(-0.45*scale, 0, 0.15*scale)
+  up2 = up1.clone()
+  up2.position.set(-0.45*scale, 0, -0.15*scale)
+  up3 = up1.clone()
+  up3.position.set(0.15*scale, 0, 0.45*scale)
+  up4 = up1.clone()
+  up4.position.set(-0.15*scale, 0, 0.45*scale)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  up3.updateMatrix()
+  up4.updateMatrix()
+  IronGeo.merge(up1.geometry, up1.matrix)
+  IronGeo.merge(up2.geometry, up2.matrix)
+  IronGeo.merge(up3.geometry, up3.matrix)
+  IronGeo.merge(up4.geometry, up4.matrix)
+
+  ironShape = new CANNON.Box(
+    new CANNON.Vec3(0.45 * scale, 0.5 * scale, 0.45 * scale)
+  )
+
+}
+function createIron(x, z, color, scale) {
+  const IronMat = new THREE.MeshStandardMaterial({ color: color })//0x57A2F3 0x53C4FF
+  ironObj = new Iron(IronGeo, IronMat, ironShape)
+  world.addBody(ironObj.boxBody)
+  scene.add(ironObj.Iron)
+  ironObj.Iron.position.set(x*scale, 0.5*scale, z*scale)
+  ironObj.boxBody.position.set(x*scale, 0.5*scale, z*scale)
+  explores.push(ironObj.boxBody)
+  exploreMeshes.push(ironObj.Iron)
+  exploreKind.push('lego')
+}
+function createFloor(x, z, scale) {
+  floorObj = new Floor(boxGeo_floor, floorMat)
+  scene.add(floorObj.floor)
+  floorObj.floor.position.set(x*scale, -0.495*scale, z*scale)
+}
+function createWarn(x ,z, scale) {
+  warnObj = new Warn(boxGeo_warn, headMaterials_warn, boxShape_warn)
+  world.addBody(warnObj.boxBody)
+  scene.add(warnObj.Warn)
+  warnObj.Warn.position.set(x*scale, 0.6*scale, z*scale)
+  warnObj.boxBody.position.set(x*scale, 0.6*scale, z*scale)
+  explores.push(warnObj.boxBody)
+  exploreMeshes.push(warnObj.Warn)
+  exploreKind.push('House')
+}
+function createBlock(x ,z, scale) {
+  blockObj = new Block(blockGeo, downGeo, blockMat, downMat, blockShape)
+  world.addBody(blockObj.boxBody)
+  scene.add(blockObj.Block)
+  blockObj.Block.position.set(x*scale, 0.5*scale, z*scale)
+  blockObj.boxBody.position.set(x*scale, 0.5*scale, z*scale)
+  boxes.push(blockObj.boxBody)
+  boxMeshes.push(blockObj.Block)
+  explores.push(blockObj.boxBody)
+  exploreMeshes.push(blockObj.Block)
+  exploreKind.push('Wooden')
+}
+function initValley() {
   //LEGO
   legoGeo = new THREE.BoxGeometry(1*scale, 1*scale, 1*scale)
   const upGeo_lego = new THREE.CylinderGeometry(0.15*scale, 0.15*scale, 0.3*scale)
@@ -236,7 +423,7 @@ function createBush(x ,z, scale) {
 
 function createScene() {
   if (map==0){
-    initTexture()
+    initValley()
     for(let now=0; now<195; now++){
       if(valley[now]==1) createLego(now%15-7, 0.5, Math.floor(now/15)-6, 0xff0000, scale)
       else if(valley[now]==2) createLego(now%15-7, 0.5, Math.floor(now/15)-6, 0xff8800, scale)
@@ -252,6 +439,29 @@ function createScene() {
         if(i<-1 | i>1) createLego_upper(i, -0.495, j, 0x7Eff00, scale)
       }
     }
+    createBazzi(-7, -6)
+    createBazzi(-6, 5)
+    createBazzi(6, -5)
+  } else if (map==1) {
+    initfactory()
+    for(let now=0; now<195; now++){
+      if(valley[now]==1) createWarn(now%15-7, Math.floor(now/15)-6, scale)
+      else if(valley[now]==2) createIron(now%15-7, Math.floor(now/15)-6, 0x57A2F3, scale)
+      else if(valley[now]==3) createIron(now%15-7, Math.floor(now/15)-6, 0x87DCFF, scale)/*
+      else if(valley[now]==4) createTree(now%15-7, Math.floor(now/15)-6, scale)*/
+      else if(valley[now]==5) createBlock(now%15-7, Math.floor(now/15)-6, scale)/*
+      else if(valley[now]==6) createHouse(now%15-7, Math.floor(now/15)-6, 0xff8800, scale)
+      else if(valley[now]==7) createHouse(now%15-7, Math.floor(now/15)-6, 0xfadc2e, scale)
+      else if(valley[now]==8) createHouse(now%15-7, Math.floor(now/15)-6, 0x51a7f5, scale)*/
+    }
+    for(let i=-7; i<=7; i++){
+      for(let j=-6; j<=6; j++){
+        createFloor(i, j, scale)
+      }
+    }
+    createBazzi(-6, -6)
+    createBazzi(-6, 6)
+    createBazzi(6, -6)
   }
   createWall(0, 1)
   createWall(0, -1)

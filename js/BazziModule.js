@@ -265,17 +265,17 @@ class Bazzi {
     for(var i=0; i < ammos.length; i++){
       var obj = Math.round(ammos[i].position.x)+7 + 15*(Math.round(ammos[i].position.z)+6)
       if ( obj==index+1 ||obj==index+2 || obj==index+16 || obj==index-14 ) dir[3] = 2
-      else if ( obj==index-1 || obj==index-2 || obj==index-16 || obj==index+14 ) dir[1] = 2
-      else if ( obj==index+15 || obj==index+30 || obj==index+16 || obj==index+14) dir[0] = 2
-      else if ( obj==index-15 || obj==index-30 || obj==index-16 || obj==index-14) dir[2] = 2
+      if ( obj==index-1 || obj==index-2 || obj==index-16 || obj==index+14 ) dir[1] = 2
+      if ( obj==index+15 || obj==index+30 || obj==index+16 || obj==index+14) dir[0] = 2
+      if ( obj==index-15 || obj==index-30 || obj==index-16 || obj==index-14) dir[2] = 2
     }
     //判斷睏寶的水球
     if(BazziFirst == true){
       var obj = Math.round(BazziFirstAmmo.ammoBody.position.x)+7 + 15*(Math.round(BazziFirstAmmo.ammoBody.position.z)+6)
       if ( obj==index+1 ||obj==index+2 || obj==index+16 || obj==index-14 ) dir[3] = 3
-      else if ( obj==index-1 || obj==index-2 || obj==index-16 || obj==index+14 ) dir[1] = 3
-      else if ( obj==index+15 || obj==index+30 || obj==index+16 || obj==index+14 ) dir[0] = 3
-      else if ( obj==index-15 || obj==index-30 || obj==index-16 || obj==index-14 ) dir[2] = 3
+      if ( obj==index-1 || obj==index-2 || obj==index-16 || obj==index+14 ) dir[1] = 3
+      if ( obj==index+15 || obj==index+30 || obj==index+16 || obj==index+14 ) dir[0] = 3
+      if ( obj==index-15 || obj==index-30 || obj==index-16 || obj==index-14 ) dir[2] = 3
     }
     //紀錄目前站立的地方可以走
     this.map[index] = 0
