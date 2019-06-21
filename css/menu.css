@@ -73,7 +73,18 @@ body{
     width:346px;
     height:180px;
     position: fixed;
-    top: 150px;
+    top: 140px;
+    left: 300px;
+    z-index:100;
+}
+#map2{
+    background-image: url("../img/map2.png");
+    background-size: cover;
+    border: none;
+    width:346px;
+    height:180px;
+    position: fixed;
+    top: 380px;
     left: 300px;
     z-index:100;
 }
