@@ -4,8 +4,8 @@ var counter = 0
 class Doe {
   constructor(scale_) {
     this.walkOffset = 0
-    const headGeo = new THREE.BoxGeometry(0.55*scale_, 0.45*scale_, 0.5*scale_)
-    const earGeo = new THREE.BoxGeometry(0.4*scale_, 0.3*scale_, 0.3*scale_)
+    const headGeo = new THREE.BoxGeometry(0.55*scale_, 0.5*scale_, 0.5*scale_)
+    const earGeo = new THREE.BoxGeometry(0.35*scale_, 0.3*scale_, 0.3*scale_)
     const bodyGeo = new THREE.BoxGeometry(0.24*scale_, 0.24*scale_, 0.25*scale_)
     const handGeo = new THREE.BoxGeometry(0.05*scale_, 0.2*scale_, 0.05*scale_)
     const upGeo = new THREE.BoxGeometry(0.1*scale_, 0.1*scale_, 0.1*scale_)
