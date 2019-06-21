@@ -1,4 +1,7 @@
 // 睏寶
+var BazziFirst = false;
+var BazziFirstAmmo;
+var counter = 0
 class Bazzi {
   constructor(scale_) {
     this.walkOffset = 0
@@ -86,81 +89,145 @@ class Bazzi {
     this.map = []
     this.dir = 4
     this.scale = 0.4*scale_
-    this.velocity = 10
+    this.velocity = 5
     this.bodyBody.velocity.z = this.velocity
     this.positionx = 0
     this.positionz = 0
+  }
+  putBall(){
+    for(var i=0; i < explores.length; i++){
+      if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x)){
+        if (exploreKind[i] == 'Bush') continue
+        return
+      }
+    }
+
+    // 子彈剛體與網格
+    const ammoObj = new BazziBall(scale)
+    
+    BazziFirstAmmo = ammoObj
+    var temp = 0;
+    var x = this.Bazzi.position.x;
+    var y = this.Bazzi.position.y;
+    var z = this.Bazzi.position.z;
+
+    var id = setInterval(function() { 
+      //console.log(temp);
+      temp = temp + 1; 
+      if(temp == 3){
+        scene.add(ammoObj.ammoMesh)
+        world.addBody(ammoObj.ammoBody)
+      }
+      else if(temp == 28){
+        BazziFirst = false
+        ammoObj.ammoMesh.geometry.dispose()
+        world.remove(ammoObj.ammoBody)
+        scene.remove(ammoObj.ammoMesh)
+        clearInterval(id)
+      }
+    }, 200);
+
+    ammoObj.ammoBody.position.set(Math.round(x), 0.5*scale, Math.round(z))
+    ammoObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
+
   }
   update(exploreMeshes, ammos) {
     //這段是在偵測四周哪裡可以走
     if(this.dir == 4){ //向+z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if (Math.abs(this.bodyBody.position.z-this.positionz)>0.02 && Math.random()>0.05){
+      if (Math.abs(this.bodyBody.position.z-this.positionz)>0.005 && Math.random()>0.05){
         this.Turn(4)
       } 
       else{
+        //dir四個方向能不能走 0是可以1是不行2是水球
+        //0跟4同樣是往+Z方向前進 0用在array的index裡面 4用在turn裡面
         var dir = this.Mapping(exploreMeshes, ammos)
         dir[0] = 1
         //隨機向+x或-x方向走
+        //假設左右皆可走 隨機選擇一邊
         if (dir[1]==0 && dir[3]==0){
           if(Math.random()>0.5) this.Turn(1)
           else this.Turn(3)
         }
         else if(dir[1]==0) this.Turn(1)
         else if(dir[3]==0) this.Turn(3)
-        else if(dir[2]==0)  this.Turn(2)
+        else if(dir[2]==0) {
+          if(Math.abs(this.bodyBody.position.z-this.positionz)<0.005 && BazziFirst == false){
+            BazziFirst = true
+            this.putBall();
+          }
+          this.Turn(2)
+        }
       }
     }else if(this.dir == 1){ //向-x方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if (Math.abs(this.bodyBody.position.x-this.positionx)>0.02 && Math.random()>0.05){
+      if (Math.abs(this.bodyBody.position.x-this.positionx)>0.005 && Math.random()>0.05){
         this.Turn(1)
       }
       else{
+        //隨機向+z或-z方向走
         var dir = this.Mapping(exploreMeshes, ammos)
         dir[1] = 1
-        //隨機向+z或-z方向走
         if (dir[2]==0 && dir[0]==0){
           if(Math.random()>0.5) this.Turn(2)
           else this.Turn(4)
         }
         else if(dir[2]==0) this.Turn(2)
         else if(dir[0]==0) this.Turn(4)
-        else if(dir[3]==0) this.Turn(3)
+        else if(dir[3]==0) {
+          if(Math.abs(this.bodyBody.position.x-this.positionx)<0.005 && BazziFirst == false){
+            BazziFirst = true
+            this.putBall();
+          }
+          this.Turn(3)
+        }
       }
     }else if(this.dir == 2){ //向-z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if(Math.abs(this.bodyBody.position.z-this.positionz)>0.02 && Math.random()>0.05){
+      if(Math.abs(this.bodyBody.position.z-this.positionz)>0.005 && Math.random()>0.05){
         this.Turn(2)
       }
       else{
+        //隨機向+x或-x方向走
         var dir = this.Mapping(exploreMeshes, ammos)
         dir[2] = 1
-        //隨機向+x或-x方向走
         if (dir[1]==0 && dir[3]==0){
           if(Math.random()>0.5) this.Turn(1)
           else this.Turn(3)
         }
         else if(dir[1]==0) this.Turn(1)
         else if(dir[3]==0) this.Turn(3)
-        else if(dir[0]==0) this.Turn(4)
+        else if(dir[0]==0)  {
+          if(Math.abs(this.bodyBody.position.z-this.positionz)<0.005 && BazziFirst == false){
+            BazziFirst = true
+            this.putBall();
+          }
+          this.Turn(4)
+        }
       }
     }
     else if(this.dir == 3){ //向+x方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if(Math.abs(this.bodyBody.position.x-this.positionx)>0.02 && Math.random()>0.05){
+      if(Math.abs(this.bodyBody.position.x-this.positionx)>0.005 && Math.random()>0.05){
         this.Turn(3)
       }
       else{
+        //隨機向+z或-z方向走
         var dir = this.Mapping(exploreMeshes, ammos)
         dir[3] = 1
-        //隨機向+z或-z方向走
         if (dir[2]==0 && dir[0]==0){
           if(Math.random()>0.5) this.Turn(2)
           else this.Turn(4)
         }
         else if(dir[2]==0) this.Turn(2)
         else if(dir[0]==0) this.Turn(4)
-        else if(dir[1]==0) this.Turn(1)
+        else if(dir[1]==0) {
+          if(Math.abs(this.bodyBody.position.x-this.positionx)<0.005 && BazziFirst == false){
+            BazziFirst = true
+            this.putBall();
+          }
+          this.Turn(1)
+        }
       }
     }
     this.positionz = this.bodyBody.position.z
@@ -169,16 +236,19 @@ class Bazzi {
 
     this.bodyBody.velocity.x = (this.dir==1 || this.dir==3) ? (this.dir-2) * this.velocity: 0
     this.bodyBody.velocity.z = (this.dir==2 || this.dir==4) ? (this.dir-3) * this.velocity: 0
+
     this.BazziFeetWalk()
     this.Bazzi.position.copy(this.bodyBody.position)
   }
   Mapping(exploreMeshes, ammos){
-    let dir = [0, 0, 0, 0]
-    var index = Math.round(this.bodyBody.position.x)+7 + 15*(Math.round(this.bodyBody.position.z)+6)
+    let dir = [0, 0, 0, 0]//四個方向能不能走
+    var index = Math.round(this.bodyBody.position.x)+7 + 15*(Math.round(this.bodyBody.position.z)+6)//目前睏寶所在格數
+    //四個if用來檢測旁邊有沒有邊界
     if ( Math.round(this.bodyBody.position.x)+7==14 ) dir[3] = 1
     if ( Math.round(this.bodyBody.position.x)+7==0 ) dir[1] = 1
     if ( Math.round(this.bodyBody.position.z)+6==0 ) dir[2] = 1
     if ( Math.round(this.bodyBody.position.z)+6==12 ) dir[0] = 1
+    //用來檢測4週有沒有物品
     for(var i=0; i < exploreMeshes.length; i++){
       var obj = Math.round(exploreMeshes[i].position.x)+7 + 15*(Math.round(exploreMeshes[i].position.z)+6)
       if ( obj==index+1 ) dir[3] = 1
@@ -186,14 +256,25 @@ class Bazzi {
       else if ( obj==index+15 ) dir[0] = 1
       else if ( obj==index-15 ) dir[2] = 1
     }
+    //用來檢測四周有沒有水球(ammos是我新增的array 在shootingModule中也有改動)
     for(var i=0; i < ammos.length; i++){
       var obj = Math.round(ammos[i].position.x)+7 + 15*(Math.round(ammos[i].position.z)+6)
-      if ( obj==index+1 ) dir[3] = 2
-      else if ( obj==index-1 ) dir[1] = 2
-      else if ( obj==index+15 ) dir[0] = 2
-      else if ( obj==index-15 ) dir[2] = 2
+      if ( obj==index+1 ||obj==index+2 || obj==index+17 || obj==index-13 ) dir[3] = 2
+      else if ( obj==index-1 || obj==index-2 || obj==index-17 || obj==index+13 ) dir[1] = 2
+      else if ( obj==index+15 || obj==index+30 || obj==index+29 || obj==index+31) dir[0] = 2
+      else if ( obj==index-15 || obj==index-30 || obj==index-29 || obj==index+31) dir[2] = 2
     }
+    //判斷睏寶的水球
+    if(BazziFirst == true){
+      var obj = Math.round(BazziFirstAmmo.ammoBody.position.x)+7 + 15*(Math.round(BazziFirstAmmo.ammoBody.position.z)+6)
+      if ( obj==index+1 ||obj==index+2 || obj==index+17 || obj==index-13 ) dir[3] = 3
+      else if ( obj==index-1 || obj==index-2 || obj==index-17 || obj==index+13 ) dir[1] = 3
+      else if ( obj==index+15 || obj==index+30 || obj==index+29 || obj==index+31 ) dir[0] = 3
+      else if ( obj==index-15 || obj==index-30 || obj==index-29 || obj==index+31 ) dir[2] = 3
+    }
+    //紀錄目前站立的地方可以走
     this.map[index] = 0
+    //紀錄四周可不可以走
     for (let i=1; i<=4; i++) {
       if (i%2) this.map[index+i-2] = dir[i]
       else this.map[index+15*(i-3)] = dir[i%4]

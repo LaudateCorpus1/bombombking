@@ -246,6 +246,7 @@ function render() {
       }
       
       eatItem.play()
+      if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
       scene.remove(item[i].ammoMesh);
       item_exist[i]=false;
     }
