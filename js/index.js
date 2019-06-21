@@ -250,6 +250,44 @@ function render() {
       scene.remove(item[i].ammoMesh);
       item_exist[i]=false;
     }
+    x = BazziObj.Bazzi.position.x;
+    z = BazziObj.Bazzi.position.z;
+    if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+      scene.remove(item[i].ammoMesh);
+      item_exist[i]=false;
+    }
+    if(playerBody.first == true){
+      x = playerBody.firstAmmo.position.x;
+      z = playerBody.firstAmmo.position.z;
+      if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+        scene.remove(item[i].ammoMesh);
+        item_exist[i]=false;
+      }
+    }
+    if(playerBody.second == true){
+      x = playerBody.secondAmmo.position.x;
+      z = playerBody.secondAmmo.position.z;
+      if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+        scene.remove(item[i].ammoMesh);
+        item_exist[i]=false;
+      }
+    }
+    if(playerBody.third == true){
+      x = playerBody.thirdAmmo.position.x;
+      z = playerBody.thirdAmmo.position.z;
+      if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+        scene.remove(item[i].ammoMesh);
+        item_exist[i]=false;
+      }
+    }
+    if(BazziFirst == true){
+      x = BazziFirstAmmo.ammoBody.position.x;
+      z = BazziFirstAmmo.ammoBody.position.z;
+      if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+        scene.remove(item[i].ammoMesh);
+        item_exist[i]=false;
+      }
+    }
   }
 
   if(playerBody.first) {

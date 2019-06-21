@@ -110,8 +110,8 @@ function explore(xx, zz) {
 //x是玩家的座標 
 //xx是水球的座標
 //xxx是其他可能被炸掉的東西的座標
-function check_explore(ammoBody) {
-  playerBody.bomb--
+function check_explore(ammoBody, whose) {
+  if(whose == 'player')playerBody.bomb--
   const xx = ammoBody.position.x
   const yy = ammoBody.position.y
   const zz = ammoBody.position.z
@@ -142,7 +142,7 @@ function check_explore(ammoBody) {
       if(!jump){
         console.log('first bomb')
         playerBody.first = false
-        check_explore(playerBody.firstAmmo)
+        check_explore(playerBody.firstAmmo, 'player')
         var index = ammos.indexOf(playerBody.firstAmmo);
         if (index> -1)
           ammos.splice(index, 1);
@@ -169,7 +169,7 @@ function check_explore(ammoBody) {
       if(!jump){
         console.log('second bomb')
         playerBody.second = false
-        check_explore(playerBody.secondAmmo)
+        check_explore(playerBody.secondAmmo, 'player')
         var index = ammos.indexOf(playerBody.secondAmmo);
         if (index> -1)
           ammos.splice(index, 1);
@@ -196,7 +196,7 @@ function check_explore(ammoBody) {
       if(!jump){
         console.log('third bomb')
         playerBody.third = false
-        check_explore(playerBody.thirdAmmo)
+        check_explore(playerBody.thirdAmmo, 'player')
         var index = ammos.indexOf(playerBody.thirdAmmo);
         if (index> -1)
           ammos.splice(index, 1);
@@ -206,7 +206,32 @@ function check_explore(ammoBody) {
       }
     }
   }
+  if(BazziFirst == true){
+    BazziFirst = false
+    var xxx = BazziFirstAmmo.ammoBody.position.x
+    var yyy = BazziFirstAmmo.ammoBody.position.y
+    var zzz = BazziFirstAmmo.ammoBody.position.z
+    if( (Math.abs(xxx-xx)<=playerBody.len && zzz==zz) || 
+         (Math.abs(zzz-zz)<=playerBody.len && xxx==xx) ){
+      let jump = false
+      for(var i=0; i < explores.length; i++){
+        if ( ((zzz-zz)==0 && Math.round(exploreMeshes[i].position.z)-zz==0 && (xxx-xx)*(Math.round(exploreMeshes[i].position.x)-xx)>0 && Math.abs(Math.round(exploreMeshes[i].position.x)-xx) < Math.abs(xxx-xx)) ||
+             ((xxx-xx)==0 && Math.round(exploreMeshes[i].position.x)-xx==0 && (zzz-zz)*(Math.round(exploreMeshes[i].position.z)-zz)>0 && Math.abs(Math.round(exploreMeshes[i].position.z)-zz) < Math.abs(zzz-zz)) ){
+          jump = true
+          break
+        }
+      }
+      if(!jump){
+        console.log('Bazzi bomb')
+        check_explore(BazziFirstAmmo.ammoBody, 'Bazzi')
+        BazziFirstAmmo.ammoMesh.geometry.dispose()
+        world.remove(BazziFirstAmmo.ammoBody)
+        scene.remove(BazziFirstAmmo.ammoMesh)
+      }
+    }
+  }
   explore(xx, zz)
+  makeDelay();
 }
 
 // shooting related settings
@@ -224,6 +249,13 @@ function getShootDir(event, targetVec) {
 
   // 取得 raycaster 方向並決定發射方向
   targetVec.copy(raycaster.ray.direction)
+}
+
+function makeDelay() {
+  var id = setInterval(function(){
+    BazziFirstFlag = false;
+    clearInterval(id);
+  }, 500)
 }
 
 window.addEventListener('mousedown', function(e) {
@@ -309,15 +341,15 @@ window.addEventListener('mouseup', function(e) {
       var id = setInterval(async function() {  
         if (nowBomb==1 && playerBody.first) {
           playerBody.first = false
-          await check_explore(ammoObj.ammoBody)
+          await check_explore(ammoObj.ammoBody, 'player')
         }
         else if (nowBomb==2 && playerBody.second) {
           playerBody.second = false
-          await check_explore(ammoObj.ammoBody)
+          await check_explore(ammoObj.ammoBody, 'player')
         }
         else if (nowBomb==3 && playerBody.third) {
           playerBody.third = false
-          await check_explore(ammoObj.ammoBody)
+          await check_explore(ammoObj.ammoBody, 'player')
         } 
         var index = ammos.indexOf(ammoObj.ammoBody);
         if (index> -1)
