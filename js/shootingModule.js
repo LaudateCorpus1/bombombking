@@ -87,7 +87,7 @@ function explore(xx, zz) {
   for (let i=0; i<4; i++){
     if(dir_len[i]==-1 || exk[i]=='n' || exk[i]=='Tree' || exk[i] == 'House') continue
     if(Math.random() > 0){
-      let boxObj = new Box(scale);
+      let boxObj = new Box(0.3);
       scene.add(boxObj.ammoMesh)
       boxObj.ammoBody.position.set(ex[i].position.x, 0.5, ex[i].position.z)
       boxObj.ammoMesh.position.set(ex[i].position.x, 0.5, ex[i].position.z)
@@ -302,10 +302,9 @@ window.addEventListener('mouseup', function(e) {
       //console.log(x, y, z)
   
       // 子彈剛體與網格
-      const ammoObj = new Ball(scale)
-      scene.add(ammoObj.ammoMesh)
-      world.addBody(ammoObj.ammoBody)
-      ammos.push(ammoObj.ammoBody)
+      const ammoObj = new Ball(0.7)
+      //scene.add(ammoObj.ammoMesh)
+      //world.addBody(ammoObj.ammoBody)
 /*
       explores.push(ammoObj.ammoBody)
       exploreMeshes.push(ammoObj.ammoMesh)
@@ -313,18 +312,27 @@ window.addEventListener('mouseup', function(e) {
       
       var nowBomb = playerBody.first ? playerBody.second ? 3 : 2 :  1;
       if(nowBomb == 1){
+        playerBody.firstObj = ammoObj
         playerBody.firstAmmo = ammoObj.ammoBody;
         playerBody.firstAmmoMesh = ammoObj.ammoMesh;
+        scene.add(playerBody.firstObj.ammoMesh)
+        world.addBody(playerBody.firstObj.ammoBody)
         playerBody.first = true;
       }
       else if(nowBomb == 2){
+        playerBody.secondObj = ammoObj
         playerBody.secondAmmo = ammoObj.ammoBody;
         playerBody.secondAmmoMesh = ammoObj.ammoMesh;
+        scene.add(playerBody.secondObj.ammoMesh)
+        world.addBody(playerBody.secondObj.ammoBody)
         playerBody.second = true;
       }
       else if(nowBomb == 3){
+        playerBody.thirdObj = ammoObj
         playerBody.thirdAmmo = ammoObj.ammoBody;
         playerBody.thirdAmmoMesh = ammoObj.ammoMesh;
+        scene.add(playerBody.thirdObj.ammoMesh)
+        world.addBody(playerBody.thirdObj.ammoBody)
         playerBody.third = true;
       }
       playerBody.bomb = playerBody.bomb + 1;

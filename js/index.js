@@ -11,13 +11,11 @@ let BazziObj
 var skip=0;
 const bgm = document.getElementById('bgm')
 const eatItem = document.getElementById('eatItem')
+const notification = document.getElementById('notification')
+
 bgm.volume = 0.8
 
 let isTarget = false
-let targetObj
-let target_x
-let target_y
-let target_z
 let target_shootDirection
 
 const scale = 1;
@@ -233,6 +231,20 @@ function render() {
     var x = playerBody.position.x, z = playerBody.position.z;
     var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+      notification.innerText += "You get a tool box " + item[i].boxType + " \n"
+      
+      // tool of jump one time
+      if(item[i].boxType == 2){
+        controls.setJumpVelocity(20)
+        var toolToJump = setInterval(function() {
+          controls.setJumpVelocity(0)
+          clearInterval(toolToJump)
+        },5000)
+      }
+      else if(item[i].boxType == 1) {
+        
+      }
+      
       eatItem.play()
       if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
       scene.remove(item[i].ammoMesh);
@@ -276,6 +288,16 @@ function render() {
         item_exist[i]=false;
       }
     }
+  }
+
+  if(playerBody.first) {
+    playerBody.firstObj.playAnimation()
+  }
+  if(playerBody.second) {
+    playerBody.secondObj.playAnimation()
+  }
+  if(playerBody.third) {
+    playerBody.thirdObj.playAnimation()
   }
   
   if (isTarget) {
