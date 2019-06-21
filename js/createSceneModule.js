@@ -41,6 +41,27 @@ let blockShape
 //iron
 let IronGeo
 let ironShape
+//col
+let ColGeo
+let ColShape
+const ColMat = new THREE.MeshStandardMaterial({ color: 0x91B1DA })
+//col2
+let Col2Geo
+let Col2Shape
+const Col2Mat = new THREE.MeshStandardMaterial({ color: 0xA8BBCC })
+//mail
+let mailGeo
+let headMaterials_mail
+let boxShape_mail
+//light
+let lightMat = new THREE.MeshPhongMaterial({
+  color: 0xFFFFFF, transparent: true, opacity: 0.8, emissive: 0x007DFF
+})
+let lightGeo
+let upGeo_light
+let downGeo_light
+let colMat
+let lightShape
 
 function initfactory() {
   //floor
@@ -171,7 +192,93 @@ function initfactory() {
   ironShape = new CANNON.Box(
     new CANNON.Vec3(0.45 * scale, 0.5 * scale, 0.45 * scale)
   )
+  //col
+  ColShape = new CANNON.Box(
+    new CANNON.Vec3(0.45 * scale, 0.7 * scale, 0.45 * scale)
+  )
+  ColGeo = new THREE.BoxGeometry(1*scale, 1.2*scale, 1*scale)
+  const col_x2 = new THREE.BoxGeometry(1*scale,0.2*scale,  0.2*scale)
 
+  up1 = new THREE.Mesh(col_x2, branchMat)
+  up1.position.set(0, 0.7*scale, 0.2*scale)
+  up2 = up1.clone()
+  up2.position.set(0, 0.7*scale, -0.2*scale)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  ColGeo.merge(up1.geometry, up1.matrix)
+  ColGeo.merge(up2.geometry, up2.matrix)
+  //col
+  Col2Shape = new CANNON.Box(
+    new CANNON.Vec3(0.45 * scale, 0.7 * scale, 0.45 * scale)
+  )
+  Col2Geo = new THREE.BoxGeometry(0.7*scale, 1.4*scale, 1*scale)
+  const col_y2 = new THREE.BoxGeometry(0.2*scale, 1.4*scale,  0.2*scale)
+
+  up1 = new THREE.Mesh(col_y2, branchMat)
+  up1.position.set(0.4*scale, 0, 0.4*scale)
+  up2 = up1.clone()
+  up2.position.set(0.4*scale, 0, -0.4*scale)
+  up3 = up1.clone()
+  up3.position.set(0.4*scale, 0, 0.13*scale)
+  up4 = up1.clone()
+  up4.position.set(0.4*scale, 0, -0.13*scale)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  up3.updateMatrix()
+  up4.updateMatrix()
+  Col2Geo.merge(up1.geometry, up1.matrix)
+  Col2Geo.merge(up2.geometry, up2.matrix)
+  Col2Geo.merge(up3.geometry, up3.matrix)
+  Col2Geo.merge(up4.geometry, up4.matrix)
+  up1 = new THREE.Mesh(col_y2, branchMat)
+  up1.position.set(-0.4*scale, 0, 0.4*scale)
+  up2 = up1.clone()
+  up2.position.set(-0.4*scale, 0, -0.4*scale)
+  up3 = up1.clone()
+  up3.position.set(-0.4*scale, 0, 0.13*scale)
+  up4 = up1.clone()
+  up4.position.set(-0.4*scale, 0, -0.13*scale)
+  up1.updateMatrix()
+  up2.updateMatrix()
+  up3.updateMatrix()
+  up4.updateMatrix()
+  Col2Geo.merge(up1.geometry, up1.matrix)
+  Col2Geo.merge(up2.geometry, up2.matrix)
+  Col2Geo.merge(up3.geometry, up3.matrix)
+  Col2Geo.merge(up4.geometry, up4.matrix)
+  //wooden
+  mailGeo = new THREE.BoxGeometry(1*scale, 1*scale, 1*scale)
+  const headMap_mail = textureLoader.load('./img/paper_up.png')
+  const skinMap_mail = textureLoader.load('./img/paper_other.png')
+  headMaterials_mail = []
+  for (let i = 0; i < 6; i++) {
+    let map
+    if (i === 2 | i === 3) map = headMap_mail
+    else map = skinMap_mail
+    headMaterials_mail.push(new THREE.MeshPhongMaterial({ map: map }))
+  } 
+  mailShape = new CANNON.Box(
+    new CANNON.Vec3(0.45 * scale, 0.5 * scale, 0.45 * scale)
+  )
+  //light
+  lightGeo = new THREE.CylinderGeometry(0.4*scale, 0.4*scale, 1.6*scale)
+  upGeo_light = new THREE.CylinderGeometry(0.25*scale, 0.5*scale, 0.3*scale)
+  downGeo_light = new THREE.CylinderGeometry(0.5*scale, 0.5*scale, 0.2*scale)
+  colMat = new THREE.MeshStandardMaterial({ color: 0x4A63B5 })
+  lightShape = new CANNON.Box(
+    new CANNON.Vec3(0.45 * scale, 1 * scale, 0.45 * scale)
+  )
+
+}
+function createlight(x ,z, scale) {
+  lightObj = new Light(scale, lightGeo, upGeo_light, downGeo_light, colMat, lightMat, lightShape)
+  world.addBody(lightObj.boxBody)
+  scene.add(lightObj.Light)
+  lightObj.Light.position.set(x*scale, 1*scale, z*scale)
+  lightObj.boxBody.position.set(x*scale, 1*scale, z*scale)
+  explores.push(lightObj.boxBody)
+  exploreMeshes.push(lightObj.Light)
+  exploreKind.push('Tree')
 }
 function createIron(x, z, color, scale) {
   const IronMat = new THREE.MeshStandardMaterial({ color: color })//0x57A2F3 0x53C4FF
@@ -183,6 +290,38 @@ function createIron(x, z, color, scale) {
   explores.push(ironObj.boxBody)
   exploreMeshes.push(ironObj.Iron)
   exploreKind.push('lego')
+}
+function createCol(x, z, scale) {
+  colObj = new Col(ColGeo, ColMat, ColShape)
+  world.addBody(colObj.boxBody)
+  scene.add(colObj.Col)
+  colObj.Col.position.set(x*scale, 0.5*scale, z*scale)
+  colObj.boxBody.position.set(x*scale, 0.5*scale, z*scale)
+  explores.push(colObj.boxBody)
+  exploreMeshes.push(colObj.Col)
+  exploreKind.push('House')
+}
+function createCol2(x, z, scale) {
+  col2Obj = new Col2(Col2Geo, Col2Mat, Col2Shape)
+  world.addBody(col2Obj.boxBody)
+  scene.add(col2Obj.Col2)
+  col2Obj.Col2.position.set(x*scale, 0.5*scale, z*scale)
+  col2Obj.boxBody.position.set(x*scale, 0.5*scale, z*scale)
+  explores.push(col2Obj.boxBody)
+  exploreMeshes.push(col2Obj.Col2)
+  exploreKind.push('House')
+}
+function createMail(x ,z, scale) {
+  mailObj = new Mail(scale, mailGeo, headMaterials_mail, mailShape)
+  world.addBody(mailObj.boxBody)
+  scene.add(mailObj.Mail)
+  mailObj.Mail.position.set(x*scale, 0.5*scale, z*scale)
+  mailObj.boxBody.position.set(x*scale, 0.5*scale, z*scale)
+  boxes.push(mailObj.boxBody)
+  boxMeshes.push(mailObj.Mail)
+  explores.push(mailObj.boxBody)
+  exploreMeshes.push(mailObj.Mail)
+  exploreKind.push('Wooden')
 }
 function createFloor(x, z, scale) {
   floorObj = new Floor(boxGeo_floor, floorMat)
@@ -447,12 +586,12 @@ function createScene() {
     for(let now=0; now<195; now++){
       if(factory[now]==1) createWarn(now%15-7, Math.floor(now/15)-6, scale)
       else if(factory[now]==2) createIron(now%15-7, Math.floor(now/15)-6, 0x57A2F3, scale)
-      else if(factory[now]==3) createIron(now%15-7, Math.floor(now/15)-6, 0x87DCFF, scale)/*
-      else if(factory[now]==4) createTree(now%15-7, Math.floor(now/15)-6, scale)*/
-      else if(factory[now]==5) createBlock(now%15-7, Math.floor(now/15)-6, scale)/*
-      else if(factory[now]==6) createHouse(now%15-7, Math.floor(now/15)-6, 0xff8800, scale)
-      else if(factory[now]==7) createHouse(now%15-7, Math.floor(now/15)-6, 0xfadc2e, scale)
-      else if(factory[now]==8) createHouse(now%15-7, Math.floor(now/15)-6, 0x51a7f5, scale)*/
+      else if(factory[now]==3) createIron(now%15-7, Math.floor(now/15)-6, 0x87DCFF, scale)
+      else if(factory[now]==4) createCol(now%15-7, Math.floor(now/15)-6, scale)
+      else if(factory[now]==5) createBlock(now%15-7, Math.floor(now/15)-6, scale)
+      else if(factory[now]==6) createCol2(now%15-7, Math.floor(now/15)-6, scale)
+      else if(factory[now]==7) createlight(now%15-7, Math.floor(now/15)-6, scale)
+      else if(factory[now]==8) createMail(now%15-7, Math.floor(now/15)-6, scale)
     }
     for(let i=-7; i<=7; i++){
       for(let j=-6; j<=6; j++){
