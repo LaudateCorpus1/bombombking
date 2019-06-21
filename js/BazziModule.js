@@ -74,7 +74,7 @@ class Bazzi {
     )*/
     const bodyShape = new CANNON.Sphere(0.4)
     this.bodyBody = new CANNON.Body({
-      mass: 50,
+      mass: 5,
     })
     this.bodyBody.addShape(bodyShape)
     this.bodyBody.position.set(0, 0.4*scale_, 0)
@@ -86,7 +86,7 @@ class Bazzi {
       }
     })
     this.map = []
-    this.dir = 0
+    this.dir = 4
     this.scale = 0.4*scale_
     this.velocity = 5
     this.bodyBody.velocity.z = this.velocity
@@ -131,43 +131,34 @@ class Bazzi {
     ammoObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
 
   }
-  update() {
+  update(exploreMeshes, ammos) {
     //這段是在偵測四周哪裡可以走
-    if(this.dir == 0){ //向+z方向走的話
+    if(this.dir == 4){ //向+z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if (Math.abs(this.bodyBody.position.z-this.positionz)>0.002 && Math.random()>0.05){
-        this.bodyBody.velocity.z = this.velocity
-        this.bodyBody.velocity.x = 0
-        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
-        this.dir = 0
+      if (Math.abs(this.bodyBody.position.z-this.positionz)>0.02 && Math.random()>0.05){
+        this.Turn(4)
       } 
       else{
-        console.log(this.bodyBody.position.z-this.positionz, BazziFirst)
-        if(Math.abs(this.bodyBody.position.z-this.positionz)<0.002 && BazziFirst == false){
+        var dir = this.Mapping(exploreMeshes, ammos)
+        dir[0] = 1
+        if(Math.abs(this.bodyBody.position.z-this.positionz)<0.02 && BazziFirst == false){
           BazziFirst = true
           this.putBall();
           console.log("Bazzi's ball")
         }
         //隨機向+x或-x方向走
-        if(Math.random()>0.5){
-          this.bodyBody.velocity.x = -this.velocity*2
-          this.bodyBody.velocity.z = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI/2)
-          this.dir = 1
-        }else{
-          this.bodyBody.velocity.x = this.velocity*2
-          this.bodyBody.velocity.z = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3/2)
-          this.dir = 3
+        if (dir[1]==0 && dir[3]==0){
+          if(Math.random()>0.5) this.Turn(1)
+          else this.Turn(3)
         }
+        else if(dir[1]==0) this.Turn(1)
+        else if(dir[3]==0) this.Turn(3)
+        else if(dir[2]==0) this.Turn(2)
       }
     }else if(this.dir == 1){ //向-x方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if (Math.abs(this.bodyBody.position.x-this.positionx)>0.002 && Math.random()>0.05){
-        this.bodyBody.velocity.x = -this.velocity
-        this.bodyBody.velocity.z = 0
-        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI/2)
-        this.dir = 1
+      if (Math.abs(this.bodyBody.position.x-this.positionx)>0.02 && Math.random()>0.05){
+        this.Turn(1)
       }
       else{
         //隨機向+z或-z方向走
@@ -176,26 +167,20 @@ class Bazzi {
           this.putBall();
           console.log("Bazzi's ball")
         }
-        if(Math.random()>0.5){
-          this.bodyBody.velocity.z = -this.velocity*2
-          this.bodyBody.velocity.x = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
-          this.dir = 2
+        var dir = this.Mapping(exploreMeshes, ammos)
+        dir[1] = 1
+        if (dir[2]==0 && dir[0]==0){
+          if(Math.random()>0.5) this.Turn(2)
+          else this.Turn(4)
         }
-        else{
-          this.bodyBody.velocity.z = this.velocity*2
-          this.bodyBody.velocity.x = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
-          this.dir = 0
-        }
+        else if(dir[2]==0) this.Turn(2)
+        else if(dir[0]==0) this.Turn(4)
+        else if(dir[3]==0) this.Turn(3)
       }
     }else if(this.dir == 2){ //向-z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if(Math.abs(this.bodyBody.position.z-this.positionz)>0.002 && Math.random()>0.05){
-        this.bodyBody.velocity.z = -this.velocity
-        this.bodyBody.velocity.x = 0
-        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
-        this.dir = 2
+      if(Math.abs(this.bodyBody.position.z-this.positionz)>0.02 && Math.random()>0.05){
+        this.Turn(2)
       }
       else{
         //隨機向+x或-x方向走
@@ -204,27 +189,21 @@ class Bazzi {
           this.putBall();
           console.log("Bazzi's ball")
         }
-        if(Math.random()>0.5){
-          this.bodyBody.velocity.x = this.velocity*2
-          this.bodyBody.velocity.z = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3/2)
-          this.dir = 3
+        var dir = this.Mapping(exploreMeshes, ammos)
+        dir[2] = 1
+        if (dir[1]==0 && dir[3]==0){
+          if(Math.random()>0.5) this.Turn(1)
+          else this.Turn(3)
         }
-        else{
-          this.bodyBody.velocity.x = -this.velocity*2
-          this.bodyBody.velocity.z = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI/2)
-          this.dir = 1
-        }
+        else if(dir[1]==0) this.Turn(1)
+        else if(dir[3]==0) this.Turn(3)
+        else if(dir[0]==0) this.Turn(4)
       }
     }
     else if(this.dir == 3){ //向+x方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
-      if(Math.abs(this.bodyBody.position.x-this.positionx)>0.002 && Math.random()>0.05){
-        this.bodyBody.velocity.x = this.velocity
-        this.bodyBody.velocity.z = 0
-        this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*3/2)
-        this.dir = 3
+      if(Math.abs(this.bodyBody.position.x-this.positionx)>0.02 && Math.random()>0.05){
+        this.Turn(3)
       }
       else{
         //隨機向+z或-z方向走
@@ -233,29 +212,61 @@ class Bazzi {
           this.putBall();
           console.log("Bazzi's ball")
         }
-        if(Math.random()>0.5){
-          this.bodyBody.velocity.z = this.velocity*2
-          this.bodyBody.velocity.x = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI*2)
-          this.dir = 0
+        var dir = this.Mapping(exploreMeshes, ammos)
+        dir[3] = 1
+        if (dir[2]==0 && dir[0]==0){
+          if(Math.random()>0.5) this.Turn(2)
+          else this.Turn(4)
         }
-        else{
-          this.bodyBody.velocity.z = -this.velocity*2
-          this.bodyBody.velocity.x = 0
-          this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI)
-          this.dir = 2
-        }
+        else if(dir[2]==0) this.Turn(2)
+        else if(dir[0]==0) this.Turn(4)
+        else if(dir[1]==0) this.Turn(1)
       }
     }
     this.positionz = this.bodyBody.position.z
     this.positionx = this.bodyBody.position.x
     this.bodyBody.position.y = this.scale //避免睏寶飛起來
 
+    this.bodyBody.velocity.x = (this.dir==1 || this.dir==3) ? (this.dir-2) * this.velocity: 0
+    this.bodyBody.velocity.z = (this.dir==2 || this.dir==4) ? (this.dir-3) * this.velocity: 0
+
     this.BazziFeetWalk()
     this.Bazzi.position.copy(this.bodyBody.position)
   }
+  Mapping(exploreMeshes, ammos){
+    let dir = [0, 0, 0, 0]
+    var index = Math.round(this.bodyBody.position.x)+7 + 15*(Math.round(this.bodyBody.position.z)+6)
+    if ( Math.round(this.bodyBody.position.x)+7==14 ) dir[3] = 1
+    if ( Math.round(this.bodyBody.position.x)+7==0 ) dir[1] = 1
+    if ( Math.round(this.bodyBody.position.z)+6==0 ) dir[2] = 1
+    if ( Math.round(this.bodyBody.position.z)+6==12 ) dir[0] = 1
+    for(var i=0; i < exploreMeshes.length; i++){
+      var obj = Math.round(exploreMeshes[i].position.x)+7 + 15*(Math.round(exploreMeshes[i].position.z)+6)
+      if ( obj==index+1 ) dir[3] = 1
+      else if ( obj==index-1 ) dir[1] = 1
+      else if ( obj==index+15 ) dir[0] = 1
+      else if ( obj==index-15 ) dir[2] = 1
+    }
+    for(var i=0; i < ammos.length; i++){
+      var obj = Math.round(ammos[i].position.x)+7 + 15*(Math.round(ammos[i].position.z)+6)
+      if ( obj==index+1 ) dir[3] = 2
+      else if ( obj==index-1 ) dir[1] = 2
+      else if ( obj==index+15 ) dir[0] = 2
+      else if ( obj==index-15 ) dir[2] = 2
+    }
+    this.map[index] = 0
+    for (let i=1; i<=4; i++) {
+      if (i%2) this.map[index+i-2] = dir[i]
+      else this.map[index+15*(i-3)] = dir[i%4]
+    }
+    return dir
+  }
+  Turn (direction){
+    this.Bazzi.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), -Math.PI/2*direction)
+    this.dir = direction
+  }
   BazziFeetWalk() {
-    this.walkOffset += 0.04
+    this.walkOffset += 0.4
     
     this.foot1.rotation.x = Math.sin(this.walkOffset) / 2 // 右手
     this.foot2.rotation.x = -Math.sin(this.walkOffset) / 2 // 左手
