@@ -2,6 +2,7 @@ let explores = []
 let exploreMeshes = []
 let exploreKind = []
 let delete_ = []
+let ammos = []
 let item = []
 let item_exist = []
 
@@ -104,6 +105,7 @@ function explore(xx, zz) {
     world.remove(ex[i])
     scene.remove(exm[i])
   }
+  console.log(ammos)
 }
 //x是玩家的座標 
 //xx是水球的座標
@@ -141,6 +143,9 @@ function check_explore(ammoBody) {
         console.log('first bomb')
         playerBody.first = false
         check_explore(playerBody.firstAmmo)
+        var index = ammos.indexOf(playerBody.firstAmmo);
+        if (index> -1)
+          ammos.splice(index, 1);
         playerBody.firstAmmoMesh.geometry.dispose()
         world.remove(playerBody.firstAmmo)
         scene.remove(playerBody.firstAmmoMesh)
@@ -165,6 +170,9 @@ function check_explore(ammoBody) {
         console.log('second bomb')
         playerBody.second = false
         check_explore(playerBody.secondAmmo)
+        var index = ammos.indexOf(playerBody.secondAmmo);
+        if (index> -1)
+          ammos.splice(index, 1);
         playerBody.secondAmmoMesh.geometry.dispose()
         world.remove(playerBody.secondAmmo)
         scene.remove(playerBody.secondAmmoMesh)
@@ -189,6 +197,9 @@ function check_explore(ammoBody) {
         console.log('third bomb')
         playerBody.third = false
         check_explore(playerBody.thirdAmmo)
+        var index = ammos.indexOf(playerBody.thirdAmmo);
+        if (index> -1)
+          ammos.splice(index, 1);
         playerBody.thirdAmmoMesh.geometry.dispose()
         world.remove(playerBody.thirdAmmo)
         scene.remove(playerBody.thirdAmmoMesh)
@@ -262,6 +273,7 @@ window.addEventListener('mouseup', function(e) {
       const ammoObj = new Ball(scale)
       scene.add(ammoObj.ammoMesh)
       world.addBody(ammoObj.ammoBody)
+      ammos.push(ammoObj.ammoBody)
 /*
       explores.push(ammoObj.ammoBody)
       exploreMeshes.push(ammoObj.ammoMesh)
@@ -299,6 +311,9 @@ window.addEventListener('mouseup', function(e) {
           playerBody.third = false
           await check_explore(ammoObj.ammoBody)
         } 
+        var index = ammos.indexOf(ammoObj.ammoBody);
+        if (index> -1)
+          ammos.splice(index, 1);
         ammoObj.ammoMesh.geometry.dispose()
         world.remove(ammoObj.ammoBody)
         scene.remove(ammoObj.ammoMesh)

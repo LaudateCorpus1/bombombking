@@ -91,7 +91,7 @@ class Bazzi {
     this.positionx = 0
     this.positionz = 0
   }
-  update(exploreMeshes) {
+  update(exploreMeshes, ammos) {
     //這段是在偵測四周哪裡可以走
     if(this.dir == 4){ //向+z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
@@ -99,7 +99,7 @@ class Bazzi {
         this.Turn(4)
       } 
       else{
-        var dir = this.Mapping(exploreMeshes)
+        var dir = this.Mapping(exploreMeshes, ammos)
         dir[0] = 1
         //隨機向+x或-x方向走
         if (dir[1]==0 && dir[3]==0){
@@ -116,7 +116,7 @@ class Bazzi {
         this.Turn(1)
       }
       else{
-        var dir = this.Mapping(exploreMeshes)
+        var dir = this.Mapping(exploreMeshes, ammos)
         dir[1] = 1
         //隨機向+z或-z方向走
         if (dir[2]==0 && dir[0]==0){
@@ -133,7 +133,7 @@ class Bazzi {
         this.Turn(2)
       }
       else{
-        var dir = this.Mapping(exploreMeshes)
+        var dir = this.Mapping(exploreMeshes, ammos)
         dir[2] = 1
         //隨機向+x或-x方向走
         if (dir[1]==0 && dir[3]==0){
@@ -151,7 +151,7 @@ class Bazzi {
         this.Turn(3)
       }
       else{
-        var dir = this.Mapping(exploreMeshes)
+        var dir = this.Mapping(exploreMeshes, ammos)
         dir[3] = 1
         //隨機向+z或-z方向走
         if (dir[2]==0 && dir[0]==0){
@@ -172,7 +172,7 @@ class Bazzi {
     this.BazziFeetWalk()
     this.Bazzi.position.copy(this.bodyBody.position)
   }
-  Mapping(exploreMeshes){
+  Mapping(exploreMeshes, ammos){
     let dir = [0, 0, 0, 0]
     var index = Math.round(this.bodyBody.position.x)+7 + 15*(Math.round(this.bodyBody.position.z)+6)
     if ( Math.round(this.bodyBody.position.x)+7==14 ) dir[3] = 1
@@ -185,6 +185,13 @@ class Bazzi {
       else if ( obj==index-1 ) dir[1] = 1
       else if ( obj==index+15 ) dir[0] = 1
       else if ( obj==index-15 ) dir[2] = 1
+    }
+    for(var i=0; i < ammos.length; i++){
+      var obj = Math.round(ammos[i].position.x)+7 + 15*(Math.round(ammos[i].position.z)+6)
+      if ( obj==index+1 ) dir[3] = 2
+      else if ( obj==index-1 ) dir[1] = 2
+      else if ( obj==index+15 ) dir[0] = 2
+      else if ( obj==index-15 ) dir[2] = 2
     }
     this.map[index] = 0
     for (let i=1; i<=4; i++) {
