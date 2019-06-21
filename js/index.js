@@ -234,6 +234,7 @@ function render() {
     var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
       eatItem.play()
+      if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
       scene.remove(item[i].ammoMesh);
       item_exist[i]=false;
     }

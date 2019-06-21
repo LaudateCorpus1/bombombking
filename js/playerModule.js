@@ -106,6 +106,7 @@ function createPlayer(){/*
   
   playerBody.len = 1
   playerBody.bomb = 0;
+  playerBody.maxBomb = 1
   playerBody.first = false;
   playerBody.second = false;
   playerBody.third = false;
