@@ -445,14 +445,14 @@ function createScene() {
   } else if (map==1) {
     initfactory()
     for(let now=0; now<195; now++){
-      if(valley[now]==1) createWarn(now%15-7, Math.floor(now/15)-6, scale)
-      else if(valley[now]==2) createIron(now%15-7, Math.floor(now/15)-6, 0x57A2F3, scale)
-      else if(valley[now]==3) createIron(now%15-7, Math.floor(now/15)-6, 0x87DCFF, scale)/*
-      else if(valley[now]==4) createTree(now%15-7, Math.floor(now/15)-6, scale)*/
-      else if(valley[now]==5) createBlock(now%15-7, Math.floor(now/15)-6, scale)/*
-      else if(valley[now]==6) createHouse(now%15-7, Math.floor(now/15)-6, 0xff8800, scale)
-      else if(valley[now]==7) createHouse(now%15-7, Math.floor(now/15)-6, 0xfadc2e, scale)
-      else if(valley[now]==8) createHouse(now%15-7, Math.floor(now/15)-6, 0x51a7f5, scale)*/
+      if(factory[now]==1) createWarn(now%15-7, Math.floor(now/15)-6, scale)
+      else if(factory[now]==2) createIron(now%15-7, Math.floor(now/15)-6, 0x57A2F3, scale)
+      else if(factory[now]==3) createIron(now%15-7, Math.floor(now/15)-6, 0x87DCFF, scale)/*
+      else if(factory[now]==4) createTree(now%15-7, Math.floor(now/15)-6, scale)*/
+      else if(factory[now]==5) createBlock(now%15-7, Math.floor(now/15)-6, scale)/*
+      else if(factory[now]==6) createHouse(now%15-7, Math.floor(now/15)-6, 0xff8800, scale)
+      else if(factory[now]==7) createHouse(now%15-7, Math.floor(now/15)-6, 0xfadc2e, scale)
+      else if(factory[now]==8) createHouse(now%15-7, Math.floor(now/15)-6, 0x51a7f5, scale)*/
     }
     for(let i=-7; i<=7; i++){
       for(let j=-6; j<=6; j++){
