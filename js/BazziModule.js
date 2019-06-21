@@ -1,4 +1,6 @@
 // 睏寶
+var BazziFirst = false;
+var counter = 0
 class Bazzi {
   constructor(scale_) {
     this.walkOffset = 0
@@ -86,13 +88,50 @@ class Bazzi {
     this.map = []
     this.dir = 0
     this.scale = 0.4*scale_
-    this.velocity = 10
+    this.velocity = 5
     this.bodyBody.velocity.z = this.velocity
     this.positionx = 0
     this.positionz = 0
   }
-  update() {
+  putBall(){
+    for(var i=0; i < explores.length; i++){
+      if (Math.round(exploreMeshes[i].position.z)==Math.round(z) && Math.round(exploreMeshes[i].position.x)==Math.round(x)){
+        if (exploreKind[i] == 'Bush') continue
+        return
+      }
+    }
 
+    // 子彈剛體與網格
+    const ammoObj = new Ball(scale)
+    
+    this.BazziFirstAmmo = ammoObj
+    var temp = 0;
+    var x = this.Bazzi.position.x;
+    var y = this.Bazzi.position.y;
+    var z = this.Bazzi.position.z;
+
+    var id = setInterval(function() { 
+      console.log(temp);
+      temp = temp + 1; 
+      if(temp == 3){
+        scene.add(ammoObj.ammoMesh)
+        world.addBody(ammoObj.ammoBody)
+      }
+      else if(temp == 28){
+        BazziFirst = false
+        console.log(BazziFirst)
+        ammoObj.ammoMesh.geometry.dispose()
+        world.remove(ammoObj.ammoBody)
+        scene.remove(ammoObj.ammoMesh)
+        clearInterval(id)
+      }
+    }, 200);
+
+    ammoObj.ammoBody.position.set(Math.round(x), 0.5*scale, Math.round(z))
+    ammoObj.ammoMesh.position.set(Math.round(x), 0.5*scale, Math.round(z))
+
+  }
+  update() {
     //這段是在偵測四周哪裡可以走
     if(this.dir == 0){ //向+z方向走的話
       //如果撞牆就會轉彎 或 有5%的機率會在中途轉彎
@@ -103,6 +142,12 @@ class Bazzi {
         this.dir = 0
       } 
       else{
+        console.log(this.bodyBody.position.z-this.positionz, BazziFirst)
+        if(Math.abs(this.bodyBody.position.z-this.positionz)<0.002 && BazziFirst == false){
+          BazziFirst = true
+          this.putBall();
+          console.log("Bazzi's ball")
+        }
         //隨機向+x或-x方向走
         if(Math.random()>0.5){
           this.bodyBody.velocity.x = -this.velocity*2
@@ -126,6 +171,11 @@ class Bazzi {
       }
       else{
         //隨機向+z或-z方向走
+        if(Math.abs(this.bodyBody.position.x-this.positionx)<0.002 && BazziFirst == false){
+          BazziFirst = true
+          this.putBall();
+          console.log("Bazzi's ball")
+        }
         if(Math.random()>0.5){
           this.bodyBody.velocity.z = -this.velocity*2
           this.bodyBody.velocity.x = 0
@@ -149,6 +199,11 @@ class Bazzi {
       }
       else{
         //隨機向+x或-x方向走
+        if(Math.abs(this.bodyBody.position.z-this.positionz)<0.002 && BazziFirst == false){
+          BazziFirst = true
+          this.putBall();
+          console.log("Bazzi's ball")
+        }
         if(Math.random()>0.5){
           this.bodyBody.velocity.x = this.velocity*2
           this.bodyBody.velocity.z = 0
@@ -173,6 +228,11 @@ class Bazzi {
       }
       else{
         //隨機向+z或-z方向走
+        if(Math.abs(this.bodyBody.position.x-this.positionx)<0.002 && BazziFirst == false){
+          BazziFirst = true
+          this.putBall();
+          console.log("Bazzi's ball")
+        }
         if(Math.random()>0.5){
           this.bodyBody.velocity.z = this.velocity*2
           this.bodyBody.velocity.x = 0
