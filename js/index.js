@@ -142,12 +142,18 @@ function createGround() {
   scene.add(ground)
 }
 
-function createBazzi(x ,z) {/*
-  creeperObj = new Creeper()
-  // tweenHandler()
-  creeperObj.creeper.position.set(10, 0, 0)
-  scene.add(creeperObj.creeper)*/
+function createBazzi(x ,z) {
   Obj = new Bazzi(scale)
+  world.addBody(Obj.bodyBody)
+  scene.add(Obj.Bazzi)
+  Obj.Bazzi.position.set(x, 0.4, z)
+  Obj.bodyBody.position.set(x, 0.4, z)
+  BazziObj.push(Obj)
+  mem++
+}
+
+function createDoe(x ,z) {
+  Obj = new Doe(scale)
   world.addBody(Obj.bodyBody)
   scene.add(Obj.Bazzi)
   Obj.Bazzi.position.set(x, 0.4, z)

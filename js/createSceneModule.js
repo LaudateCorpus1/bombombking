@@ -579,7 +579,7 @@ function createScene() {
       }
     }
     createBazzi(-7, -6)
-    createBazzi(-6, 5)
+    createDoe(-6, 5)
     createBazzi(6, -5)
   } else if (map==1) {
     initfactory()
@@ -599,7 +599,7 @@ function createScene() {
       }
     }
     createBazzi(-6, -6)
-    createBazzi(-6, 6)
+    createDoe(-6, 6)
     createBazzi(6, -6)
   }
   createWall(0, 1)
