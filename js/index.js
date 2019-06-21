@@ -146,7 +146,7 @@ function createBazzi(x ,z) {/*
   // tweenHandler()
   creeperObj.creeper.position.set(10, 0, 0)
   scene.add(creeperObj.creeper)*/
-  BazziObj = new Bazzi(scale)
+  BazziObj= new Bazzi(scale)
   world.addBody(BazziObj.bodyBody)
   scene.add(BazziObj.Bazzi)
   BazziObj.Bazzi.position.set(x, 0.4, z)
@@ -190,6 +190,11 @@ function init() {
   document.body.appendChild(renderer.domElement)
 }
 
+function handleEndGame(Loser) {
+  if(Loser == 'Bazzi') window.location.replace('./win.html')
+  else window.location.replace('./gameover.html')
+}
+
 function render() {
   requestAnimationFrame(render)
   stats.update()
@@ -224,15 +229,14 @@ function render() {
   }
   for(var i=0; i<item.length; i++){
     if(item_exist[i] == false) continue;
-    //item[i].playAnimation()
     item[i].playAnimation()
     var x = playerBody.position.x, z = playerBody.position.z;
     var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
-      notification.innerText += "You get a tool box " + item[i].boxType + " \n"
-      
+      if(item[i].boxType == 1) notification.innerText += "Get one more water ball!\n"
+      else if(item[i].boxType == 0) notification.innerText += "Press SPACE to jump!\n"
       // tool of jump one time
-      if(item[i].boxType == 2){
+      if(item[i].boxType == 0){
         controls.setJumpVelocity(20)
         var toolToJump = setInterval(function() {
           controls.setJumpVelocity(0)
@@ -240,11 +244,9 @@ function render() {
         },5000)
       }
       else if(item[i].boxType == 1) {
-        
+        if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
       }
-      
       eatItem.play()
-      if(playerBody.maxBomb < 3) playerBody.maxBomb = playerBody.maxBomb + 1;
       scene.remove(item[i].ammoMesh);
       item_exist[i]=false;
     }
@@ -252,7 +254,7 @@ function render() {
     z = BazziObj.Bazzi.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
       scene.remove(item[i].ammoMesh);
-      item_exist[i]=false;
+        item_exist[i]=false;
     }
     if(playerBody.first == true){
       x = playerBody.firstAmmo.position.x;
