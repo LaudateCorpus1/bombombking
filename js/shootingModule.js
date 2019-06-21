@@ -100,7 +100,7 @@ function explore(xx, zz) {
       explores.splice(index, 1);
       exploreMeshes.splice(index, 1);
       exploreKind.splice(index, 1);
-      console.log("box delete")
+      //console.log("box delete")
     }
     if(exm[i].geometry) exm[i].geometry.dispose()
     world.remove(ex[i])
@@ -120,22 +120,20 @@ function check_explore(ammoBody, whose) {
   var y = playerBody.position.y;
   var z = playerBody.position.z;
   //here
-  if( (Math.abs(x-xx)<=playerBody.len && Math.round(z)==zz) || (Math.abs(z-zz)<=playerBody.len && Math.round(x)==xx) ){
+  if( (Math.abs(x-xx)<=playerBody.len && Math.round(z)==zz && Math.round(y-yy)<=playerBody.len) || (Math.abs(z-zz)<=playerBody.len && Math.round(x)==xx && Math.round(y-yy)<=playerBody.len) ){
     var die = setInterval(function(){
       handleEndGame('player');
       clearInterval(die);
     }, 300);
   }
-  for(let i=0; i<num; i++){
-    let Bx = BazziObj[i].bodyBody.position.x
-    let Bz = BazziObj[i].bodyBody.position.z;
-    if( (Math.abs(Bx-xx)<=playerBody.len && Math.round(Bz)==zz) || (Math.abs(Bz-zz)<=playerBody.len && Math.round(Bx)==xx) ){
-      var die = setInterval(function(){
-        //handleEndGame('Bazzi');
-        diedBazzi++
-        clearInterval(die);
-      }, 300);
-    }
+  let Bx = BazziObj.bodyBody.position.x
+  let By = BazziObj.bodyBody.position.y;
+  let Bz = BazziObj.bodyBody.position.z;
+  if( (Math.abs(Bx-xx)<=playerBody.len && Math.round(Bz)==zz) || (Math.abs(Bz-zz)<=playerBody.len && Math.round(Bx)==xx) ){
+    var die = setInterval(function(){
+      if(whose != 'Bazzi')handleEndGame('Bazzi');
+      clearInterval(die);
+    }, 300);
   }
   
   if(playerBody.first == true){
@@ -153,7 +151,6 @@ function check_explore(ammoBody, whose) {
         }
       }
       if(!jump){
-        console.log('first bomb')
         playerBody.first = false
         check_explore(playerBody.firstAmmo, 'player')
         var index = ammos.indexOf(playerBody.firstAmmo);
@@ -180,7 +177,7 @@ function check_explore(ammoBody, whose) {
         }
       }
       if(!jump){
-        console.log('second bomb')
+        //console.log('second bomb')
         playerBody.second = false
         check_explore(playerBody.secondAmmo, 'player')
         var index = ammos.indexOf(playerBody.secondAmmo);
@@ -207,7 +204,7 @@ function check_explore(ammoBody, whose) {
         }
       }
       if(!jump){
-        console.log('third bomb')
+        //console.log('third bomb')
         playerBody.third = false
         check_explore(playerBody.thirdAmmo, 'player')
         var index = ammos.indexOf(playerBody.thirdAmmo);
@@ -235,7 +232,7 @@ function check_explore(ammoBody, whose) {
         }
       }
       if(!jump){
-        console.log('Bazzi bomb')
+        //console.log('Bazzi bomb')
         check_explore(BazziFirstAmmo.ammoBody, 'Bazzi')
         BazziFirstAmmo.ammoMesh.geometry.dispose()
         world.remove(BazziFirstAmmo.ammoBody)
@@ -272,7 +269,7 @@ function makeDelay() {
 }
 
 window.addEventListener('mousedown', function(e) {
-  this.console.log("mouse down")
+  //this.console.log("mouse down")
   x = playerBody.position.x
   y = playerBody.position.y
   z = playerBody.position.z
