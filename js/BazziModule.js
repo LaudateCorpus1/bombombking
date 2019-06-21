@@ -105,7 +105,7 @@ class Bazzi {
     }
 
     // 子彈剛體與網格
-    const ammoObj = new Ball(scale)
+    const ammoObj = new BazziBall(scale)
     
     BazziFirstAmmo = ammoObj
     var temp = 0;

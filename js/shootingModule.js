@@ -121,7 +121,7 @@ function check_explore(ammoBody, whose) {
   //here
   if( (Math.abs(x-xx)<=playerBody.len && Math.round(z)==zz) || (Math.abs(z-zz)<=playerBody.len && Math.round(x)==xx) ){
     var die = setInterval(function(){
-      handleEndGame();
+      handleEndGame('player');
       clearInterval(die);
     }, 300);
   }
@@ -130,7 +130,7 @@ function check_explore(ammoBody, whose) {
     let Bz = BazziObj[i].bodyBody.position.z;
     if( (Math.abs(Bx-xx)<=playerBody.len && Math.round(Bz)==zz) || (Math.abs(Bz-zz)<=playerBody.len && Math.round(Bx)==xx) ){
       var die = setInterval(function(){
-        handleEndGame();
+        handleEndGame('Bazzi');
         clearInterval(die);
       }, 300);
     }

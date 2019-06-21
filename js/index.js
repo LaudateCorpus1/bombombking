@@ -196,8 +196,9 @@ function init() {
   document.body.appendChild(renderer.domElement)
 }
 
-function handleEndGame() {
-  window.location.replace('./result.html')
+function handleEndGame(Loser) {
+  if(Loser == 'Bazzi') window.location.replace('./win.html')
+  else window.location.replace('./gameover.html')
 }
 
 function render() {

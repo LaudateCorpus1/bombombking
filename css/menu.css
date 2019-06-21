@@ -6,6 +6,11 @@ body{
     position: fixed;
     top: 88px;
 }
+#logo:hover{
+    height: 250px;
+    top: 60px;
+    left: -5px;
+}
 #btn1{
     position: fixed;
     background-color: rgba(30%,0%,0%,0);
@@ -17,6 +22,10 @@ body{
     top: 170px;
     left: 480px;
 }
+#btn1:hover{
+    top: 130px;
+    height: 100px;
+}
 #btn2{
     position: fixed;
     background-color: rgba(30%,0%,0%,0);
@@ -27,6 +36,10 @@ body{
     font-family: 'Gloria Hallelujah', cursive;
     top: 170px;
     left: 950px;
+}
+#btn2:hover{
+    top: 130px;
+    height: 100px;
 }
 #bazzi{
     position: fixed;
