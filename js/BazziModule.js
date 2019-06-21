@@ -99,9 +99,12 @@ class Bazzi {
         this.Turn(4)
       } 
       else{
+        //dir四個方向能不能走 0是可以1是不行2是水球
+        //0跟4同樣是往+Z方向前進 0用在array的index裡面 4用在turn裡面
         var dir = this.Mapping(exploreMeshes, ammos)
         dir[0] = 1
         //隨機向+x或-x方向走
+        //假設左右皆可走 隨機選擇一邊
         if (dir[1]==0 && dir[3]==0){
           if(Math.random()>0.5) this.Turn(1)
           else this.Turn(3)
@@ -173,12 +176,14 @@ class Bazzi {
     this.Bazzi.position.copy(this.bodyBody.position)
   }
   Mapping(exploreMeshes, ammos){
-    let dir = [0, 0, 0, 0]
-    var index = Math.round(this.bodyBody.position.x)+7 + 15*(Math.round(this.bodyBody.position.z)+6)
+    let dir = [0, 0, 0, 0]//四個方向能不能走
+    var index = Math.round(this.bodyBody.position.x)+7 + 15*(Math.round(this.bodyBody.position.z)+6)//目前睏寶所在格數
+    //四個if用來檢測旁邊有沒有邊界
     if ( Math.round(this.bodyBody.position.x)+7==14 ) dir[3] = 1
     if ( Math.round(this.bodyBody.position.x)+7==0 ) dir[1] = 1
     if ( Math.round(this.bodyBody.position.z)+6==0 ) dir[2] = 1
     if ( Math.round(this.bodyBody.position.z)+6==12 ) dir[0] = 1
+    //用來檢測4週有沒有物品
     for(var i=0; i < exploreMeshes.length; i++){
       var obj = Math.round(exploreMeshes[i].position.x)+7 + 15*(Math.round(exploreMeshes[i].position.z)+6)
       if ( obj==index+1 ) dir[3] = 1
@@ -186,6 +191,7 @@ class Bazzi {
       else if ( obj==index+15 ) dir[0] = 1
       else if ( obj==index-15 ) dir[2] = 1
     }
+    //用來檢測四周有沒有水球(ammos是我新增的array 在shootingModule中也有改動)
     for(var i=0; i < ammos.length; i++){
       var obj = Math.round(ammos[i].position.x)+7 + 15*(Math.round(ammos[i].position.z)+6)
       if ( obj==index+1 ) dir[3] = 2
@@ -193,7 +199,9 @@ class Bazzi {
       else if ( obj==index+15 ) dir[0] = 2
       else if ( obj==index-15 ) dir[2] = 2
     }
+    //紀錄目前站立的地方可以走
     this.map[index] = 0
+    //紀錄四周可不可以走
     for (let i=1; i<=4; i++) {
       if (i%2) this.map[index+i-2] = dir[i]
       else this.map[index+15*(i-3)] = dir[i%4]
