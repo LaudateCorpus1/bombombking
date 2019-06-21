@@ -579,8 +579,8 @@ function createScene() {
       }
     }
     createBazzi(-7, -6)
-    //createBazzi(-6, 5)
-    //createBazzi(6, -5)
+    createBazzi(-6, 5)
+    createBazzi(6, -5)
   } else if (map==1) {
     initfactory()
     for(let now=0; now<195; now++){
@@ -599,8 +599,8 @@ function createScene() {
       }
     }
     createBazzi(-6, -6)
-    //createBazzi(-6, 6)
-    //createBazzi(6, -6)
+    createBazzi(-6, 6)
+    createBazzi(6, -6)
   }
   createWall(0, 1)
   createWall(0, -1)
