@@ -1,5 +1,6 @@
 // 睏寶
 var BazziFirst = false;
+var BazziFirstFlag = false;
 var BazziFirstAmmo;
 var counter = 0
 class Bazzi {
@@ -111,7 +112,7 @@ class Bazzi {
     var y = this.Bazzi.position.y;
     var z = this.Bazzi.position.z;
 
-    var id = setInterval(function() { 
+    var id = setInterval(async function() { 
       //console.log(temp);
       temp = temp + 1; 
       if(temp == 3){
@@ -119,7 +120,7 @@ class Bazzi {
         world.addBody(ammoObj.ammoBody)
       }
       else if(temp == 28){
-        BazziFirst = false
+        await check_explore(BazziFirstAmmo.ammoBody, 'Bazzi')
         ammoObj.ammoMesh.geometry.dispose()
         world.remove(ammoObj.ammoBody)
         scene.remove(ammoObj.ammoMesh)
@@ -149,8 +150,9 @@ class Bazzi {
         else if(dir[1]==0) this.Turn(1)
         else if(dir[3]==0) this.Turn(3)
         else if(dir[2]==0) {
-          if(Math.abs(this.bodyBody.position.z-this.positionz)<0.005 && BazziFirst == false){
+          if(Math.abs(this.bodyBody.position.z-this.positionz)<0.005 && BazziFirst == false && BazziFirstFlag == false){
             BazziFirst = true
+            BazziFirstFlag = true
             this.putBall();
           }
           this.Turn(2)
@@ -172,8 +174,9 @@ class Bazzi {
         else if(dir[2]==0) this.Turn(2)
         else if(dir[0]==0) this.Turn(4)
         else if(dir[3]==0) {
-          if(Math.abs(this.bodyBody.position.x-this.positionx)<0.005 && BazziFirst == false){
+          if(Math.abs(this.bodyBody.position.x-this.positionx)<0.005 && BazziFirst == false && BazziFirstFlag == false){
             BazziFirst = true
+            BazziFirstFlag = true
             this.putBall();
           }
           this.Turn(3)
@@ -195,8 +198,9 @@ class Bazzi {
         else if(dir[1]==0) this.Turn(1)
         else if(dir[3]==0) this.Turn(3)
         else if(dir[0]==0)  {
-          if(Math.abs(this.bodyBody.position.z-this.positionz)<0.005 && BazziFirst == false){
+          if(Math.abs(this.bodyBody.position.z-this.positionz)<0.005 && BazziFirstFlag == false && BazziFirst == false){
             BazziFirst = true
+            BazziFirstFlag = true
             this.putBall();
           }
           this.Turn(4)
@@ -219,8 +223,9 @@ class Bazzi {
         else if(dir[2]==0) this.Turn(2)
         else if(dir[0]==0) this.Turn(4)
         else if(dir[1]==0) {
-          if(Math.abs(this.bodyBody.position.x-this.positionx)<0.005 && BazziFirst == false){
+          if(Math.abs(this.bodyBody.position.x-this.positionx)<0.005 && BazziFirst == false && BazziFirstFlag == false){
             BazziFirst = true
+            BazziFirstFlag = true
             this.putBall();
           }
           this.Turn(1)
