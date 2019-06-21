@@ -23,7 +23,7 @@ class Box {
         this.walkOffset = 0
         this.scaleOffset = 0
 
-        this.boxType = Math.floor(Math.random()*3)
+        this.boxType = Math.floor(Math.random()*2)
     }
 
     playAnimation() {
