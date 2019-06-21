@@ -1,7 +1,7 @@
 // 道具
 class Box {
     constructor(scale) {
-        const halfExtents = new CANNON.Vec3(0.3, 0.3, 0.3)
+        const halfExtents = new CANNON.Vec3(scale, scale, scale)
         const boxShape = new CANNON.Box(halfExtents)
         const boxGeometry = new THREE.BoxGeometry(
             halfExtents.x,
@@ -22,6 +22,8 @@ class Box {
         this.ammoMesh.receiveShadow = true
         this.walkOffset = 0
         this.scaleOffset = 0
+
+        this.boxType = Math.floor(Math.random()*3)
     }
 
     playAnimation() {

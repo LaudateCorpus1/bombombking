@@ -11,6 +11,8 @@ let BazziObj
 var skip=0;
 const bgm = document.getElementById('bgm')
 const eatItem = document.getElementById('eatItem')
+const notification = document.getElementById('notification')
+
 bgm.volume = 0.8
 
 let isTarget = false
@@ -233,6 +235,7 @@ function render() {
     var x = playerBody.position.x, z = playerBody.position.z;
     var xx = item[i].ammoBody.position.x, zz = item[i].ammoBody.position.z;
     if(Math.round(x) == Math.round(xx) && Math.round(z) == Math.round(zz)){
+      notification.innerText += "You get a tool box " + item[i].boxType + " \n"
       eatItem.play()
       scene.remove(item[i].ammoMesh);
       item_exist[i]=false;
@@ -241,6 +244,12 @@ function render() {
 
   if(playerBody.first) {
     playerBody.firstObj.playAnimation()
+  }
+  if(playerBody.second) {
+    playerBody.secondObj.playAnimation()
+  }
+  if(playerBody.third) {
+    playerBody.thirdObj.playAnimation()
   }
   
   if (isTarget) {
