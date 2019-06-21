@@ -54,14 +54,10 @@ function myMove() {
     }
 }
 function btn_out(){
-    document.getElementById("restart").style.display = '';
     document.getElementById("exit").style.display = '';
 }
 function gameexit(){
     window.location.href = "menu.html";
-}
-function gamerestart(){
-    window.location.href = "index.html";
 }
 window.onload = function (){
     myMove();

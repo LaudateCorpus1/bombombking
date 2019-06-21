@@ -4,6 +4,7 @@ let exploreKind = []
 let delete_ = []
 let ammos = []
 let item = []
+let diedBazzi = 0
 let item_exist = []
 
 let sphereShape = new CANNON.Sphere(1.5)
@@ -130,7 +131,8 @@ function check_explore(ammoBody, whose) {
     let Bz = BazziObj[i].bodyBody.position.z;
     if( (Math.abs(Bx-xx)<=playerBody.len && Math.round(Bz)==zz) || (Math.abs(Bz-zz)<=playerBody.len && Math.round(Bx)==xx) ){
       var die = setInterval(function(){
-        handleEndGame('Bazzi');
+        //handleEndGame('Bazzi');
+        diedBazzi++
         clearInterval(die);
       }, 300);
     }
